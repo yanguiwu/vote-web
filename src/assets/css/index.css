@@ -1,0 +1,60 @@
+@import url('./color.css');
+@import url('./reset-element-ui.css');
+
+html {
+	margin: 0;
+}
+
+/* 提高优先级，避免修改主题色的时候样式被修改 */
+body {
+	margin: 0;
+	color: #666;
+	font-size: 14px ;
+    /*! @import */
+	@tailwind base;
+	@tailwind components;
+	@tailwind utilities;
+
+	button:focus {
+		outline: none;
+	}
+	@responsive {
+		.transition-width {
+			transition-property: width;
+		}
+
+		.flex-center {
+			justify-content: center;
+			align-items: center;
+		}
+
+		.min-height-10 {
+			min-height: 2.5rem;
+		}
+
+		.min-width-32 {
+			min-width: 8rem;
+		}
+
+		.leading-12 {
+			line-height: 3rem;
+		}
+	}
+}
+
+/* input type=number 去除显示样式  */
+input::-webkit-inner-spin-button {
+	display: none;
+}
+
+/* common */
+.justify-between {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.display-flex {
+	display: flex;
+	align-items: center;
+}
