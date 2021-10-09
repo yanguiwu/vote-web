@@ -23,7 +23,6 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
   const env = loadEnv(mode, root) as unknown as ImportMetaEnv
   const prodMock = true
   return {
-    base: './',
     resolve: {
       alias: setAlias([
         ['/@', 'src'],
@@ -36,7 +35,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       port: env.VITE_PORT
     },
     build: {
-      assetsDir: 'static',
+      assetsDir: './static',
       sourcemap: false,
       manifest: false,
       rollupOptions: {
