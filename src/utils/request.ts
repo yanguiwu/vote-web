@@ -2,7 +2,7 @@ import { useLayoutStore } from '/@/store/modules/layout'
 import axios from 'axios'
 import { AxiosResponse } from 'axios'
 import { ElLoading, ElNotification } from 'element-plus'
-
+console.log(import.meta)
 let loading:{close():void}
 // 创建 axios 实例
 const request = axios.create({
