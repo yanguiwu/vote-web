@@ -7,7 +7,7 @@ let loading:{close():void}
 // 创建 axios 实例
 const request = axios.create({
   // API 请求的默认前缀
-  baseURL: 'http://api.yanguiwu.com/yanguiwu',
+  baseURL: '//api.yanguiwu.com/yanguiwu',
   timeout: 60000 // 请求超时时间
 })
 
