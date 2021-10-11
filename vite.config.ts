@@ -1,5 +1,6 @@
 import { UserConfigExport, ConfigEnv, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import copy from 'rollup-plugin-copy' // 引入插件
 import path from 'path'
 import { viteMockServe } from 'vite-plugin-mock'
 import viteSvgIcons from 'vite-plugin-svg-icons'
@@ -23,8 +24,8 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
   const env = loadEnv(mode, root) as unknown as ImportMetaEnv
   const prodMock = true
   return {
-    base:'./',
-    publicDir: 'vote-web',
+    // base:'./',
+    // publicDir: 'vote-web',
     resolve: {
       alias: setAlias([
         ['/@', 'src'],
@@ -69,6 +70,11 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
         // 指定symbolId格式
         symbolId: 'icon-[dir]-[name]'
       })
+      // copy({
+      //   targets: [
+      //     { src: './public/ckeditor', dest: './dist' }
+      //   ]
+      // })
     ],
     css: {
       postcss: {

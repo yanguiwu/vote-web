@@ -10,24 +10,36 @@ const Components:IObject<() => Promise<typeof import('*.vue')>> = Object.assign(
 // 静态路由页面
 export const otherRouter:Array<IMenubarList> = [
   {
-    name: 'company',
-    path: '/company',
+    name: 'vote',
+    path: '/vote',
     component: Components['Layout'],
-    redirect: '/company/subsidiary',
+    redirect: '/vote/list',
     meta: { title: '投票活动', icon: 'el-icon-s-check' },
     children: [
       {
-        name: 'subsidiary',
-        path: '/company/subsidiary',
-        component: () => import('/@/views/company/subsidiary.vue'),
-        meta: { title: '概况', icon: 'el-icon-s-shop' }
+        name: 'vote',
+        path: '/vote/data',
+        component: () => import('/@/views/vote/list.vue'),
+        meta: { title: '概况', icon: 'el-icon-s-finance' }
       },
       {
-        name: 'department',
-        path: '/company/department',
-        component: () => import('/@/views/company/department.vue'),
-        meta: { title: '投票管理', icon: 'el-icon-s-finance' }
-      },
+        name: 'voteList',
+        path: '/vote/list',
+        component:  Components['LayoutBlank'],
+        redirect: '/vote/list/index',
+        meta: { title: '投票列表', icon: 'el-icon-s-finance' },
+        children:[{
+          name: 'voteListIndex',
+          path: '/vote/list/index',
+          component: () => import('/@/views/vote/list.vue'),
+          meta: { title: '投票列表', icon: 'el-icon-s-finance' }
+        },{
+          name: 'voteListCreate',
+          path: '/vote/list/create',
+          component: () => import('/@/views/vote/create.vue'),
+          meta: { title: '添加活动', icon: 'el-icon-s-finance', hidden: true }
+        }]
+      }
     ]
   },{
     name: 'user',

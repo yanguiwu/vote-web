@@ -1,0 +1,29 @@
+{
+  "name": "es-ckeditor",
+  "version": "4.7.2-custom-tme-mobile-patch13",
+  "description": "CKEditor-based implementation and add some plugins, For example kityformula etc.",
+  "main": "ckeditor.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cd-fez/es-ckeditor.git"
+  },
+  "keywords": [
+    "ckeditor",
+    "fckeditor",
+    "editor",
+    "wysiwyg",
+    "html",
+    "richtext",
+    "text",
+    "javascript"
+  ],
+  "author": "CKSource (http://cksource.com/)",
+  "license": "(GPL-2.0 OR LGPL-2.1 OR MPL-1.1)",
+  "bugs": {
+    "url": "http://dev.ckeditor.com"
+  },
+  "homepage": "http://ckeditor.com",
+  "__npminstall_done": "Thu Feb 20 2020 18:05:57 GMT+0800 (GMT+08:00)",
+  "_from": "es-ckeditor@4.7.2-custom-tme-mobile-patch13",
+  "_resolved": "https://registry.npm.taobao.org/es-ckeditor/download/es-ckeditor-4.7.2-custom-tme-mobile-patch13.tgz"
+}

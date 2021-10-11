@@ -3,7 +3,7 @@
 	padding: 0 20px;
 }
 .el-form-item {
-	margin-bottom: 12px;
+	margin-bottom: 5px!important;
 }
 .el-button--primary.is-plain {
 	color: #409EFF;
