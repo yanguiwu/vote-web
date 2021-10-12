@@ -55,7 +55,7 @@ const breadcrumb = (route: RouteLocationNormalizedLoaded) => {
     const notShowBreadcrumbList = ['Dashboard', 'RedirectPage'] // 不显示面包屑的导航
     if(route.matched[0] && (notShowBreadcrumbList.includes(route.matched[0].name as string))) return breadcrumbList
     route.matched.forEach(v => {
-      if(!v.meta.hidden) {
+      if(!v.meta.hiddenBreadcrumb) {
         const obj:IBreadcrumbList = {
           title: v.meta.title as string,
           path: v.path

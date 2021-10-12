@@ -1,4 +1,15 @@
 /* resert */
+.el-button--mini {
+	padding: 5px 10px!important;
+}
+.el-button--info {
+	background-color: #6fb3e0!important;
+	border-color:#6fb3e0!important;
+}
+.el-button--success {
+	background-color: #87b87f!important;
+	border-color:#87b87f!important;
+}
 .el-drawer__body {
 	padding: 0 20px;
 }

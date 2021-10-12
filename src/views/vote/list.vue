@@ -71,13 +71,47 @@
         prop='invitationName'
         label='备注'
       />
-      <el-table-column label='操作'>
+      <el-table-column label='操作' width='380px'>
         <template #default='scope'>
           <el-button
             size='mini'
-            type='text'
-            @click='()=>handleOpenAudit(scope.row.id)'
-          >审核</el-button>
+            type='info'
+            @click='()=>handleGoPlayer(scope.row.id, "voteListPlayer")'
+          >选管</el-button>
+          <el-button
+            size='mini'
+            type='info'
+            @click='()=>handleGoPlayer(scope.row.id, "voteListComplain")'
+          >举报</el-button>
+          <el-button
+            size='mini'
+            type='info'
+            @click='()=>handleGoPlayer(scope.row.id, "voteListPay")'
+          >礼物</el-button>
+          <el-button
+            size='mini'
+            type='info'
+            @click='()=>handleGoPlayer(scope.row.id, "voteListRecord")'
+          >投票</el-button>
+          <el-button
+            size='mini'
+            type='info'
+          >复制添加</el-button>
+          <div class='mt-2'>
+            <el-button
+              size='mini'
+              type='info'
+              @click='()=>handleGoPlayer(scope.row.id, "voteListRand")'
+            >添加随机投票</el-button>
+            <el-button
+              size='mini'
+              type='info'
+            >查看</el-button>
+            <el-button
+              size='mini'
+              type='info'
+            >关闭</el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -85,40 +119,43 @@
 </template>
   
 <script lang="ts">
-import { ref,defineComponent } from 'vue'
-import { useRouter }  from 'vue-router'
+import { ref,defineComponent, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 export default defineComponent({
-  props: {
-    listData: {
-      type: Array,
-      default: () => []
-    }
-  },
   emits:['on-search'],
   setup(props:any, context: any) {
     const router = useRouter()
     const formData = ref({ userName:'',invitationName: '',mobile: '' })
+    const listData = ref([])
     const currentId = ref()
     const drawerVisable = ref(false)
     const handleSearch = () => {
       context.emit('on-search', formData.value)
     }
-    const handleOpenAudit = (id:number) => {
-      drawerVisable.value = true
-      currentId.value = id
+    const handleGoPlayer = (id:number, name: string) => {
+      router.push({
+        name,
+        params: {
+          voteId: id
+        }
+      })
     }
     const handleCreateClick = () => {
       router.push({
         name: 'voteListCreate'
       })
     }
+    onMounted(() => {
+      listData.value = [{ name: 1, id: 1 }]
+    })
 
     return {
+      listData,
       formData,
       currentId,
       drawerVisable,
       handleSearch,
-      handleOpenAudit,
+      handleGoPlayer,
       handleCreateClick
     }
   }
