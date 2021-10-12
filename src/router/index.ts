@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw, createWebHashHistory } from 'vue-router'
 import { IMenubarList } from '/@/type/store/layout'
 import { components } from '/@/router/asyncRouter'
 
@@ -53,7 +53,7 @@ export const allowRouter: Array<IMenubarList> = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(), // createWebHistory
+  history: createWebHashHistory(), // createWebHistory
   routes: allowRouter as RouteRecordRaw[]
 })
 
