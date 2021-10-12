@@ -24,7 +24,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
   const env = loadEnv(mode, root) as unknown as ImportMetaEnv
   const prodMock = true
   return {
-    // base:'./',
+    base:'./',
     // publicDir: 'vote-web',
     resolve: {
       alias: setAlias([
@@ -38,6 +38,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       port: env.VITE_PORT
     },
     build: {
+      outDir: 'dist/vote-web',
       assetsDir: 'static',
       sourcemap: false,
       manifest: false,
