@@ -2,11 +2,14 @@ import { useLayoutStore } from '/@/store/modules/layout'
 import axios from 'axios'
 import { AxiosResponse } from 'axios'
 import { ElLoading, ElNotification } from 'element-plus'
+
+console.log(import.meta.env)
+
 let loading:{close():void}
 // 创建 axios 实例
 const request = axios.create({
   // API 请求的默认前缀
-  baseURL: import.meta.env.VUE_APP_API_BASE_URL as string | undefined,
+  baseURL: import.meta.env.VITE_BASE_URL as string | undefined,
   timeout: 60000 // 请求超时时间
 })
 

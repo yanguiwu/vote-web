@@ -3,12 +3,12 @@ import { AxiosResponse } from 'axios'
 import { IMenubarList } from '/@/type/store/layout'
 
 const api = {
-  login: '/api/login/backLogin',
-  getUser: '/api/login/chooseUser',
-  getUserList: '/api/login/queryUserList',
-  chooseUser: '/api/login/chooseUser',
-  getRouterList: '/api/User/getRoute',
-  publickey: '/api/User/Publickey'
+  login: '/login/backLogin',
+  getUser: '/login/chooseUser',
+  getUserList: '/login/queryUserList',
+  chooseUser: '/login/chooseUser',
+  getRouterList: '/User/getRoute',
+  publickey: '/User/Publickey'
 }
 
 export interface loginParam {
