@@ -39,6 +39,16 @@ export const otherRouter:Array<IMenubarList> = [
           component: () => import('/@/views/vote/create.vue'),
           meta: { title: '添加活动', icon: 'el-icon-s-finance', hidden: true }
         },{
+          name: 'voteListShow',
+          path: '/vote/list/show/:voteId',
+          component: () => import('/@/views/vote/create.vue'),
+          meta: { title: '查看活动', icon: 'el-icon-s-finance', hidden: true }
+        },{
+          name: 'voteListEdit',
+          path: '/vote/list/edit/:voteId',
+          component: () => import('/@/views/vote/create.vue'),
+          meta: { title: '查看活动', icon: 'el-icon-s-finance', hidden: true }
+        },{
           name: 'voteListPlayer',
           path: '/vote/list/player',
           component: Components['LayoutBlank'],

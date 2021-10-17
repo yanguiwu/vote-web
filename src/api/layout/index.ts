@@ -2,6 +2,7 @@ import request from '/@/utils/request'
 import { AxiosResponse } from 'axios'
 import { IMenubarList } from '/@/type/store/layout'
 
+
 const api = {
   login: '/login/backLogin',
   getUser: '/login/chooseUser',

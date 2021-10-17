@@ -15,7 +15,6 @@ import 'virtual:svg-icons-register'
 import DrawerHeader from '/@/components/DrawerHeader.vue'
 import FadeInput from './components/FadeInput.vue' 
 
-
 const app = createApp(App)
 direct(app)
 app.use(ElementPlus, { locale })

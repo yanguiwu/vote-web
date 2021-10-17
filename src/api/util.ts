@@ -4,7 +4,8 @@ import { IApiRegionCodeItem, IApiRegionCodeTreeItem ,ISysMenusItem } from '/@/ty
 
 const api = {
   getSysRegionCode: '/api/util/sysRegionCode',
-  sysMenu: '/api/util/queryMenu'
+  sysMenu: '/api/util/queryMenu',
+  imageDelete : 'http://api.yanguiwu.com/vote-api/sys-file/img-delete'
 }
 
 function buildSysRegionCodeTree(data:IApiRegionCodeItem[]) {
@@ -73,5 +74,13 @@ export async function getsysMenuTree():Promise<IElementTree[]> {
     const { body: { menuList = [] } } = res.data
     console.log('tree',menuList.map((item :ISysMenusItem) => buildSysMenuTree(item)))
     return menuList.map((item :ISysMenusItem) => buildSysMenuTree(item))
+  })
+}
+
+export function imageDelete(postData: any):Promise<AxiosResponse<IResponse>> {
+  return request({
+    url: api.imageDelete,
+    method: 'post',
+    data: postData
   })
 }

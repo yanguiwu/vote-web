@@ -14,7 +14,10 @@
 	padding: 0 20px;
 }
 .el-form-item {
-	margin-bottom: 5px!important;
+	margin-bottom: 8px!important;
+}
+.el-form-item__error {
+	padding-top:  0 !important;
 }
 .el-button--primary.is-plain {
 	color: #409EFF;
@@ -112,4 +115,22 @@
 	width: 80px !important;
 	height: 80px !important;
 	line-height: 80px !important;
+}
+
+.el-upload-list {
+	display: flex;
+}
+
+.el-upload-list--picture .el-upload-list__item {
+	height: 120px!important;
+	text-align: center;
+}
+.el-upload-list--picture .el-upload-list__item-thumbnail {
+	width: auto!important;
+	height: 100px!important;
+	float: none!important;
+  margin-left: 0!important;
+}
+.el-upload-list--picture .el-upload-list__item.is-success .el-upload-list__item-name {
+	display: none!important;
 }

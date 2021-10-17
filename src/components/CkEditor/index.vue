@@ -2,7 +2,7 @@
   <div>
     <editor
       v-if='initEditor'
-      :value='value'
+      :value='modelValue'
       :type='type'
       :disabled='disabled'
       :contents-css='contentsCss'
@@ -20,7 +20,7 @@ import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
 export default defineComponent({
   components: { editor },
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: ''
     },
@@ -45,7 +45,7 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['blur', 'focus', 'input', 'change'],
+  emits: ['blur', 'focus', 'change', 'update:modelValue'],
   setup(props, context) {
     const initEditor = ref(false)
     const initUploadServer = () => {
@@ -63,13 +63,14 @@ export default defineComponent({
       context.emit('focus')
     }
     const onChange = (value: string) => {
-      context.emit('input', value)
+      context.emit('update:modelValue', value)
       if (value) {
         context.emit('change', value)
       }
     }
 
     onMounted(() => {
+      window.CKEDITOR_UPLOAD_SERVER = 'http://api.yanguiwu.com/vote-api/sys-file/img-upload'
       // CKEDITOR_UPLOAD_SERVER   文件上传的地址，如果不上传到第三方（七牛去）直接配置window.CKEDITOR_UPLOAD_SERVER="当前后端项目的上传地址"
       // CKEDITOR_UPLOAD_INIT     图片上传前授权地址（七牛云上传需授权）
       // CKEDITOR_UPLOAD_INIT     图片上传后处理（七牛云上传成功后需保存到业务）
@@ -80,10 +81,10 @@ export default defineComponent({
           initUploadServer()
         }
       }, 300)
-      window.CKEDITOR_UPLOAD_INIT =
-        `${import.meta.env.VUE_APP_BASE_API}/upload/public/init` // 图片上传前授权
-      window.CKEDITOR_UPLOAD_FINISH =
-        `${import.meta.env.VUE_APP_BASE_API}/upload/public/finish/other` // 图片上传后处理
+      // window.CKEDITOR_UPLOAD_INIT =
+      //   `${import.meta.env.VUE_APP_BASE_API}/upload/public/init` // 图片上传前授权
+      // window.CKEDITOR_UPLOAD_FINISH =
+      //   `${import.meta.env.VUE_APP_BASE_API}/upload/public/finish/other` // 图片上传后处理
     })
     onUnmounted(() => {
       window.CKEDITOR_UPLOAD_SERVER = ''

@@ -9,32 +9,37 @@
           </span>
         </div>
       </template>
-      <el-form :model='formData' label-width='150px'>
-        <el-form-item label='评选主题'>
-          <el-input v-model='formData.userName' size='small' placeholder='输入主题名关键字' style='width: 50%;' />
+      {{ formData }}
+      <el-form :model='formData' label-width='160px' :rules='formRules'>
+        <el-form-item label='评选主题' prop='title'>
+          <el-input v-model='formData.title' size='small' placeholder='评选主题' style='width: 50%;' />
         </el-form-item>
         <el-form-item label='滚动文字'>
-          <el-input v-model='formData.userName' size='small' placeholder='输入主题名关键字' style='width: 50%;' />
+          <el-input v-model='formData.rollTitle' size='small' placeholder='滚动文字' style='width: 50%;' />
         </el-form-item>
         <el-form-item label='每人可投票总数:'>
-          <el-input v-model='formData.userName' size='small' placeholder='输入主题名关键字' style='width: 50%;' />
+          <el-input v-model='formData.userVoteDayNum' type='number' size='small' placeholder='每人可投票总数' style='width: 50%;' />
         </el-form-item>
         <el-form-item label='每天每人可投票次数:'>
-          <el-input v-model='formData.userName' size='small' placeholder='输入主题名关键字' style='width: 50%;' />
+          <el-input v-model='formData.userVoteSingleNum' type='number' size='small' placeholder='每天每人可投票次数' style='width: 50%;' />
         </el-form-item>
         <el-form-item label='每天可投票总数:'>
-          <el-input v-model='formData.userName' size='small' placeholder='输入主题名关键字' style='width: 50%;' />
+          <el-input v-model='formData.maxVoteNum' type='number' size='small' placeholder='每天可投票总数' style='width: 50%;' />
         </el-form-item>
-        <el-form-item label='访问量::'>
-          <el-input v-model='formData.userName' size='small' placeholder='输入主题名关键字' style='width: 50%;' />
+        <el-form-item label='访问量:' type='number'>
+          <el-input v-model='formData.initialNum' type='number' size='small' placeholder='访问量' style='width: 50%;' />
         </el-form-item>
         <el-form-item label='上传banner图:'>
           <el-upload
             class='avatar-uploader'
-            action='https://jsonplaceholder.typicode.com/posts/'
-            :show-file-list='false'
+            :action='actionUrl'
             :on-success='handleAvatarSuccess'
+            :before-remove='beforeRemove'
             :before-upload='beforeAvatarUpload'
+            :headers='header'
+            name='uploadFile'
+            :file-list='imageUrls'
+            list-type='picture'
           >
             <el-button type='primary'>
               上传图片<i class='el-icon-plus avatar-uploader-icon' />
@@ -42,25 +47,62 @@
           </el-upload>
         </el-form-item>
         <el-form-item label='活动规则:'>
-          <CkEditor v-model='formData.introduction' type='Full' />
+          {{ ruleHtml }}
+          <CkEditor v-model='ruleHtml' type='Full' />
         </el-form-item>
         <el-form-item label='活动奖品:'>
-          <CkEditor v-model='formData.introduction' type='Full' />
+          <CkEditor v-model='formData.prizeHtml' type='Full' />
         </el-form-item>
         <el-form-item label='奖品图片:'>
-          <CkEditor v-model='formData.introduction' type='Full' />
+          <CkEditor v-model='formData.prizeImgHtml' type='Full' />
         </el-form-item>
-        <el-form-item label='开始时间:'>
-          <el-input v-model='formData.userName' size='small' placeholder='输入主题名关键字' />
+        <el-form-item label='活动开始时间:'>
+          <el-date-picker v-model='formData.startTime' type='datetime' placeholder='活动开始时间' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' />
         </el-form-item>
-        <el-form-item label='结束时间:'>
-          <el-input v-model='formData.userName' size='small' placeholder='输入主题名关键字' />
+        <el-form-item label='活动结束时间:'>
+          <el-date-picker v-model='formData.endTime' type='datetime' placeholder='活动结束时间' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' />
         </el-form-item>
         <el-form-item label='投票开始时间:'>
-          <el-input v-model='formData.userName' size='small' placeholder='输入主题名关键字' />
+          <el-date-picker v-model='formData.startVoteTime' type='datetime' placeholder='投票开始时间' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' />
         </el-form-item>
         <el-form-item label='投票结束时间:'>
-          <el-input v-model='formData.userName' size='small' placeholder='输入主题名关键字' />
+          <el-date-picker v-model='formData.endVoteTime' type='datetime' placeholder='投票结束时间' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' />
+        </el-form-item>
+        <el-form-item label='自动锁定:'>
+          每
+          <el-input v-model='formData.minuteVote' type='number' size='small' style='width: 150px' />分钟超过
+          <el-input v-model='formData.maxMinuteVote' type='number' size='small' style='width: 150px' />票，锁定
+          <el-input v-model='formData.lockingMinute' type='number' size='small' style='width: 150px' />分钟
+        </el-form-item>
+        <el-form-item label='是否匿名送票:'>
+          <el-radio-group v-model='formData.isAnonymou'>
+            <el-radio :label='0'>不需要</el-radio>
+            <el-radio :label='1'>需要</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label='添加选手是否需要审核:'>
+          <el-radio-group v-model='formData.isExamine'>
+            <el-radio :label='0'>不需要</el-radio>
+            <el-radio :label='1'>需要</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label='是否开启钻石投票:'>
+          <el-radio-group v-model='formData.isPayOrder'>
+            <el-radio :label='0'>不需要</el-radio>
+            <el-radio :label='1'>需要</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label='是否开启随机投票 :'>
+          <el-radio-group v-model='formData.isRandomVote'>
+            <el-radio :label='0'>不需要</el-radio>
+            <el-radio :label='1'>需要</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label='评选主题' prop='remark'>
+          <el-input v-model='formData.remark' type='textarea' :row='4' placeholder='评选主题' style='width: 50%;' />
+        </el-form-item>
+        <el-form-item>
+          <el-button @click='handleSave'>保存</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -68,9 +110,14 @@
 </template>
 
 <script lang="ts">
-import { ref,defineComponent } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref,defineComponent, onMounted } from 'vue'
+import { useRouter ,useRoute } from 'vue-router'
 import CkEditor from '/@/components/CkEditor/index.vue'
+import { useLayoutStore } from '/@/store/modules/layout'
+import { createVote, queryVote , editVote } from '/@/api/vote/index'
+import { imageDelete } from '/@/api/util'
+import { ElMessage } from 'element-plus'
+
 export default defineComponent({
   components: { CkEditor },
   props: {
@@ -80,34 +127,113 @@ export default defineComponent({
     }
   },
   setup() {
+    const { getStatus } = useLayoutStore()
     const router = useRouter()
-    const formData = ref({ userName:'',invitationName: '',mobile: '', introduction: '' })
-    const handleCreateClick = () => {
-      router.push({
-        name: 'voteListCreate'
-      })
+    const route = useRoute()
+    const ruleHtml = ref()
+    const header = {
+      'x-auth-token': getStatus.ACCESS_TOKEN
+    }
+    const imageUrls = ref([])
+    const actionUrl = `${import.meta.env.VITE_BASE_URL}/sys-file/img-upload `
+    const formData = ref({ 
+      isAnonymou: 1,
+      isExamine: 1,
+      isPayOrder: 1,
+      isRandomVote: 1
+    })
+    const formRules = {
+      title: [
+        { required: true, message: '请输入活动名称', trigger: 'blur' },
+        {
+          max: 40,
+          message: '长度不超过40',
+          trigger: 'blur'
+        }
+      ],
+      rollTitle:[{
+        max: 120,
+        message: '长度不超过120',
+        trigger: 'blur'
+      }]
     }
     const beforeAvatarUpload = (file) => {
       const isJPG = file.type === 'image/jpeg'
       const isLt2M = file.size / 1024 / 1024 < 2
 
       if (!isJPG) {
-        // this.$message.error('上传头像图片只能是 JPG 格式!')
+        ElMessage.error('上传头像图片只能是 JPG 格式!')
       }
       if (!isLt2M) {
-        // this.$message.error('上传头像图片大小不能超过 2MB!')
+        ElMessage.error('上传头像图片大小不能超过 2MB!')
       }
-      return isJPG && isLt2M
+      return true
     }
-    const handleAvatarSuccess = (res, file) => {
-      // this.imageUrl = URL.createObjectURL(file.raw)
+    const handleAvatarSuccess = (res: any, file: any) => {
+      if(res.code === 0) {
+        imageUrls.value.push(res.body)
+      }else if(res.code === 8888) {
+        router.push('/login')
+      }
     }
+
+    const beforeRemove = (file, fileList) => {
+      return imageDelete({
+        id:file.id,
+        actId: route.params.voteId,
+        type:'voteInfo'
+      })
+    }
+
+    const handleSave = async() => {
+      let data = {
+        ...formData.value,
+        bannerImgArr:imageUrls.value.map((item) => {return item.id})// 图片ID数组
+      }
+      console.log('',data)
+      if(route.params.voteId) {
+        await editVote(data)
+      }else {
+        await createVote(data)
+      }
+      
+      ElMessage.success('创建成功')
+    }
+
+    const viewVoteInfo = async() => {
+      let data = await queryVote({ id: route.params.voteId })
+      let { bannerArr, status, storeId, createTime,createUser,fileWebPath,prizeImgUrl,prizeUrl,ruleUrl,...other } = data.data.body
+      ruleHtml.value = data.data.body.ruleHtml
+      formData.value = { 
+        ...other,
+        ruleHtml:  data.data.body.ruleHtml
+      }
+      console.log('formData',formData.value)
+      imageUrls.value = bannerArr && bannerArr.map((item) => {
+        return {
+          id:item.id,
+          url: item.fileWebPath
+        }
+      }) || []
+    }
+
+    onMounted(() => {
+      if(route.params.voteId) {
+        viewVoteInfo()
+      }
+    })
 
     return {
       formData,
-      handleCreateClick,
+      formRules,
+      actionUrl,
+      header,
+      imageUrls,
+      ruleHtml,
+      handleSave,
       beforeAvatarUpload,
-      handleAvatarSuccess
+      handleAvatarSuccess,
+      beforeRemove
     }
   }
 })
