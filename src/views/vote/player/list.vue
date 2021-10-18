@@ -16,7 +16,6 @@
         <el-button type='primary' size='mini' @click='handleSearch'>搜索</el-button>
         <el-button type='primary' size='mini'>全部</el-button>
         <el-button type='primary' size='mini'>未审核</el-button>
-        <el-button type='primary' size='mini'>批量导入</el-button>
         <el-button type='primary' size='mini'>数据导出</el-button>
         <el-button type='primary' size='mini'>批量删除</el-button>
         <el-button type='danger' size='mini'>一键随机修改票数（1-10）</el-button>

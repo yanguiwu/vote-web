@@ -5,6 +5,7 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
 
   let initUpload = function() {
     let { fileSingleSizeLimit } = editor.config
+    const { ACCESS_TOKEN } = getLocal('token')
 
     uploader = WebUploader.create({
       swf: CKEDITOR.getUrl('plugins/uploadpictures/webuploader/Uploader.swf'),
@@ -20,7 +21,7 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
       },
      
       headers: {
-        'x-auth-token': '37e07447-a74a-4372-a652-c8434d7cd783'
+        'x-auth-token': ACCESS_TOKEN
       },
       resize: false,
       fileNumLimit: 10,
@@ -242,3 +243,9 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
 
   return dialogDefinition
 })
+
+function getLocal(name) {
+  const l = localStorage.getItem(name)
+  const local = JSON.parse(l !== null ? l : '{}')
+  return local
+}
