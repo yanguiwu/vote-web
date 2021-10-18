@@ -42,6 +42,8 @@ export default defineComponent({
 
     let { value, type, contentsCss, fontSizeDefaultLabel, inline, disabled } = toRefs(props)
 
+    console.log('value111',value.value)
+
     const initUploader = () => {
       uploader = WebUploader.create({
         swf: CKEDITOR.getUrl('plugins/uploadpictures/webuploader/Uploader.swf'),
@@ -129,7 +131,7 @@ export default defineComponent({
       console.log('internalInstance',internalInstance)
       console.log('internalInstance',document)
       CKEDITOR.instances[id].on('instanceReady', function(e) {
-        ckeditor.setData(value)
+        ckeditor.setData(value.value)
         this.document.on('paste', function(e) {
           let { items } = e.data.$.clipboardData
           for (let i = 0; i < items.length; ++i) {
@@ -159,7 +161,7 @@ export default defineComponent({
         fontSize_defaultLabel: fontSizeDefaultLabel.value
       }
       console.log('CKEDITOR2',inline)
-      if (false) {
+      if (inline.value) {
         CKEDITOR.disableAutoInline = false
         ckeditor = CKEDITOR.inline(cid.value, op)
       } else {

@@ -9,7 +9,6 @@
           </span>
         </div>
       </template>
-      {{ formData }}
       <el-form :model='formData' label-width='160px' :rules='formRules'>
         <el-form-item label='评选主题' prop='title'>
           <el-input v-model='formData.title' size='small' placeholder='评选主题' style='width: 50%;' />
@@ -47,8 +46,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label='活动规则:'>
-          {{ ruleHtml }}
-          <CkEditor v-model='ruleHtml' type='Full' />
+          <CkEditor v-model='formData.ruleHtml' type='Full' />
         </el-form-item>
         <el-form-item label='活动奖品:'>
           <CkEditor v-model='formData.prizeHtml' type='Full' />
@@ -98,8 +96,8 @@
             <el-radio :label='1'>需要</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label='评选主题' prop='remark'>
-          <el-input v-model='formData.remark' type='textarea' :row='4' placeholder='评选主题' style='width: 50%;' />
+        <el-form-item label='备注' prop='remark'>
+          <el-input v-model='formData.remark' type='textarea' :row='4' placeholder='备注' style='width: 50%;' />
         </el-form-item>
         <el-form-item>
           <el-button @click='handleSave'>保存</el-button>
@@ -130,7 +128,6 @@ export default defineComponent({
     const { getStatus } = useLayoutStore()
     const router = useRouter()
     const route = useRoute()
-    const ruleHtml = ref()
     const header = {
       'x-auth-token': getStatus.ACCESS_TOKEN
     }
@@ -203,12 +200,9 @@ export default defineComponent({
     const viewVoteInfo = async() => {
       let data = await queryVote({ id: route.params.voteId })
       let { bannerArr, status, storeId, createTime,createUser,fileWebPath,prizeImgUrl,prizeUrl,ruleUrl,...other } = data.data.body
-      ruleHtml.value = data.data.body.ruleHtml
       formData.value = { 
-        ...other,
-        ruleHtml:  data.data.body.ruleHtml
+        ...other
       }
-      console.log('formData',formData.value)
       imageUrls.value = bannerArr && bannerArr.map((item) => {
         return {
           id:item.id,
@@ -229,7 +223,6 @@ export default defineComponent({
       actionUrl,
       header,
       imageUrls,
-      ruleHtml,
       handleSave,
       beforeAvatarUpload,
       handleAvatarSuccess,
