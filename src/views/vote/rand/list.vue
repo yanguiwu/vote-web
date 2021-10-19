@@ -9,7 +9,7 @@
       <el-form-item>
         <el-input v-model='formData.userName' size='mini' placeholder='输入主题名关键字' style='width: 146px' class='mr-2' />
         <el-button type='primary' size='mini' @click='handleSearch'>搜索</el-button>
-        <el-button type='success' size='mini' @click='handleGoPage("voteListRandAuto")'>自动任务</el-button>
+        <!-- <el-button type='success' size='mini' @click='handleGoPage("voteListRandAuto")'>自动任务</el-button> -->
         <el-button type='success' size='mini' @click='handleGoPage("voteListRandCreate")'>添加定时投票</el-button>
       </el-form-item>
     </el-form>

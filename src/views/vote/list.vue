@@ -43,15 +43,18 @@
         prop='title'
         label='活动名称'
       />
-      <el-table-column
-        label='投票时间'
-      />
-      <el-table-column label='选手数量'>
+      <el-table-column label='投票时间' width='90px'>
         <template #default='scope'>
-          {{ scope.row.startVoteTime }}
-          {{ scope.row.endVoteTime }}
+          {{ DateStringConvert(scope.row.startVoteTime) }}
+          <br>
+          {{ DateStringConvert(scope.row.endVoteTime) }}
+          <br>
+          {{ scope.row.countDown }}
         </template>
       </el-table-column>
+      <el-table-column
+        label='选手数量'
+      />
       <el-table-column
         prop='invitationTime'
         label='投票量'
@@ -73,11 +76,20 @@
         label='链接'
       />
       <el-table-column
-        prop='invitationName'
+        prop='infoStatus'
         label='状态'
-      />
+      >
+        <template #default='scope'>
+          <div v-if='scope.row.status == 1'>
+            <div v-if='scope.row.infoStatus == 2' class='color-success'>{{ infoStatusString(scope.row.infoStatus) }}</div>
+            <div v-else class='color-danger'>{{ infoStatusString(scope.row.infoStatus) }}</div>
+          </div>
+          <div v-if='scope.row.status == 3'>已关闭</div>
+          <div v-if='scope.row.status == 0'>未开启</div>
+        </template>
+      </el-table-column>
       <el-table-column
-        prop='invitationName'
+        prop='remark'
         label='备注'
       />
       <el-table-column label='操作' width='380px'>
@@ -113,12 +125,33 @@
               type='info'
               @click='()=>handleGoPlayer(scope.row.id, "voteListRand")'
             >添加随机投票</el-button>
+            <!-- status  0未发布 1已发布 2已删除 3已关闭 -->
             <el-button
+              v-if='scope.row.status === 0'
+              size='mini'
+              type='info'
+              @click='()=> handleChangeStatus(scope.row.id,1)'
+            >开启</el-button>
+            <el-button
+              v-if='scope.row.status === 1'
+              size='mini'
+              type='info'
+              @click='()=> handleChangeStatus(scope.row.id,3)'
+            >关闭</el-button>
+            <el-button
+              v-if='scope.row.status === 0'
+              size='mini'
+              type='info'
+              @click='()=>handleGoPlayer(scope.row.id, "voteListEdit")'
+            >编辑</el-button>
+            <el-button
+              v-if='scope.row.status != 0'
               size='mini'
               type='info'
               @click='()=>handleGoPlayer(scope.row.id, "voteListShow")'
             >查看</el-button>
             <el-button
+              v-if='scope.row.status === 0 || scope.row.status === 3 '
               size='mini'
               type='info'
               @click='()=>handleDelete(scope.row.id)'
@@ -135,6 +168,7 @@ import { ref,defineComponent, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { queryVoteList, copyVote, editStatus } from '/@/api/vote/index'
 import { ElMessage , ElMessageBox } from 'element-plus'
+import { DateStringConvert, statusString, infoStatusString } from '/@/utils/tools'
 export default defineComponent({
   emits:['on-search'],
   setup(props:any, context: any) {
@@ -181,6 +215,14 @@ export default defineComponent({
         name: 'voteListCreate'
       })
     }
+    const handleChangeStatus = async(id: number,status : number) => {
+      await editStatus({
+        id,
+        status
+      })
+      ElMessage.success('操作成功')
+      initListData()
+    }
     const handleDelete = async(id) => {
       ElMessageBox.confirm('确认删除该活动?', '警告', {
         confirmButtonText: '确定',
@@ -209,7 +251,11 @@ export default defineComponent({
       handleDelete,
       handleSearch,
       handleGoPlayer,
-      handleCreateClick
+      handleCreateClick,
+      handleChangeStatus,
+      DateStringConvert,
+      statusString, 
+      infoStatusString
     }
   }
 })

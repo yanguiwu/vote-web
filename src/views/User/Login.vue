@@ -2,7 +2,7 @@
   <div class='w-screen h-screen layout-body'>
     <div class='layout-login' @keyup='enterSubmit'>
       <div class='layout-login-right'>
-        <el-form  ref='ruleForm' class='layout-login-form' label-position='right' label-width='80px' :model='form' :rules='rules'>
+        <el-form ref='ruleForm' class='layout-login-form' label-position='right' label-width='80px' :model='form' :rules='rules'>
           <div class='title'>
             投票管理系统
           </div>
@@ -25,11 +25,10 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, computed } from 'vue'
 import { useLayoutStore } from '/@/store/modules/layout'
-import { ElNotification } from 'element-plus'
 import { validate } from '/@/utils/formExtend'
 
 const formRender = () => {
-  const { login} = useLayoutStore()
+  const { login } = useLayoutStore()
   let form = reactive({
     name: '1a2b3c',
     pwd: 'tianlan1103'

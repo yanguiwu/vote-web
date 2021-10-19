@@ -186,3 +186,52 @@ export function decode(url: string): string {
 export function encode(url: string): string {
   return encodeURIComponent(encodeURIComponent(url))
 }
+
+/**
+ * 日期字符串转换
+ * @param date 
+ * @returns 
+ */
+export function DateStringConvert(data: string): string {
+  console.log('data',data)
+  if(!data) {
+    return ''
+  }
+  const _data = data.split('')
+  if(_data.length === 14) {
+    return `${data.substr(0,4)}-${data.substr(4,2)}-${data.substr(6,2)} ${data.substr(8,2)}:${data.substr(10,2)}:${data.substr(12,2)}`
+  }
+  if(_data.length === 8) {
+    return `${data.substr(0,4)}-${data.substr(4,2)}-${data.substr(6,2)}`
+  }
+  return data
+}
+
+/**
+ * 活动状态转换
+ * @param status 
+ * @returns 
+ */
+export function statusString(status: number): string {
+  const statusArry = {
+    0:'未发布',
+    1:'已发布', 
+    2:'已删除',
+    3:'已关闭'
+  }
+  return statusArry[status]
+}
+
+/**
+ * 活动状态转换
+ * @param status 
+ * @returns 
+ */
+export function infoStatusString(status: number): string {
+  const statusArry = {
+    1:'未开始',
+    2:'进行中', 
+    3:'已结束'
+  }
+  return statusArry[status]
+}
