@@ -29,7 +29,8 @@
         <el-button type='primary' size='mini'>2021-10-12</el-button>
       </el-form-item>
     </el-form>
-    <el-table :data='listData' border>
+    <el-table :data='listData' border @selection-change='handleSelectionChange'>
+      <el-table-column type='selection' width='55' :selectable='selectable' />
       <el-table-column
         prop='fileWebPath'
         label='图片'
@@ -81,8 +82,8 @@
       >
         <template #default='scope'>
           <div v-if='scope.row.status == 1'>
-            <div v-if='scope.row.infoStatus == 2' class='color-success'>{{ infoStatusString(scope.row.infoStatus) }}</div>
-            <div v-else class='color-danger'>{{ infoStatusString(scope.row.infoStatus) }}</div>
+            <div v-if='scope.row.infoStatus == 2' class='color-success'>{{ infoStatusStr(scope.row.infoStatus) }}</div>
+            <div v-else class='color-danger'>{{ infoStatusStr(scope.row.infoStatus) }}</div>
           </div>
           <div v-if='scope.row.status == 3'>已关闭</div>
           <div v-if='scope.row.status == 0'>未开启</div>
@@ -92,7 +93,7 @@
         prop='remark'
         label='备注'
       />
-      <el-table-column label='操作' width='380px'>
+      <el-table-column label='操作' width='320px'>
         <template #default='scope'>
           <el-button
             size='mini'
@@ -160,6 +161,10 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class='mt-3'>
+      <el-button type='danger' size='mini' @click='handleBetchDelete'>批量删除</el-button>
+    </div>
+    <el-pagination layout='prev, pager, next' :total='pageData.recordCount' @current-change='pCurrentChange' />
   </el-card>
 </template>
   
@@ -168,21 +173,27 @@ import { ref,defineComponent, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { queryVoteList, copyVote, editStatus } from '/@/api/vote/index'
 import { ElMessage , ElMessageBox } from 'element-plus'
-import { DateStringConvert, statusString, infoStatusString } from '/@/utils/tools'
+import { DateStringConvert, statusStr, infoStatusStr } from '/@/utils/tools'
 export default defineComponent({
   emits:['on-search'],
   setup(props:any, context: any) {
     const router = useRouter()
     const formData = ref({ userName:'',invitationName: '',mobile: '' })
     const listData = ref([])
+    const multipleSelection = ref([])
     let pageData = ref({
       current: 1,
-      size: 10
+      size: 10,
+      recordCount: 0,
+      count: 1
     })
     const currentId = ref()
     const currentPage = ref(1)
     const pageSize = ref(10)
     const drawerVisable = ref(false)
+    const handleSelectionChange = (value: any) => {
+      multipleSelection.value = value
+    }
     const handleSearch = () => {
       context.emit('on-search', formData.value)
     }
@@ -191,10 +202,16 @@ export default defineComponent({
         ...formData.value,
         ...pageData.value
       })
-      console.log(datas)
       let { data,...other } = datas.data.body
       listData.value = data
-      pageData = { ...other }
+      pageData.value = { ...other }
+    }
+    const pCurrentChange = (current: number) => {
+      pageData.value = {
+        ...pageData.value,
+        current
+      }
+      initListData()
     }
     const handleGoPlayer = (id:number, name: string) => {
       router.push({
@@ -223,7 +240,7 @@ export default defineComponent({
       ElMessage.success('操作成功')
       initListData()
     }
-    const handleDelete = async(id) => {
+    const handleDelete = async(id: number | string) => {
       ElMessageBox.confirm('确认删除该活动?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -236,7 +253,18 @@ export default defineComponent({
         ElMessage.success('删除成功')
         initListData()
       })
-      
+    }
+    const selectable = (row: any) => {
+      return row.status === 0 || row.status === 3 
+    }
+    const handleBetchDelete = () => {
+      if(!multipleSelection.value.length) {
+        ElMessage.warning('请选择需要操作的数据')
+        return 
+      }
+      handleDelete(multipleSelection.value.map((item) => {
+        return item.id
+      }).join(','))
     }
     onMounted(() => {
       initListData()
@@ -247,6 +275,7 @@ export default defineComponent({
       formData,
       currentId,
       drawerVisable,
+      pageData,
       handleCopyVote,
       handleDelete,
       handleSearch,
@@ -254,8 +283,12 @@ export default defineComponent({
       handleCreateClick,
       handleChangeStatus,
       DateStringConvert,
-      statusString, 
-      infoStatusString
+      statusStr, 
+      infoStatusStr,
+      pCurrentChange,
+      handleBetchDelete,
+      handleSelectionChange,
+      selectable
     }
   }
 })

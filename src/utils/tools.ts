@@ -212,7 +212,7 @@ export function DateStringConvert(data: string): string {
  * @param status 
  * @returns 
  */
-export function statusString(status: number): string {
+export function statusStr(status: number): string {
   const statusArry = {
     0:'未发布',
     1:'已发布', 
@@ -227,11 +227,21 @@ export function statusString(status: number): string {
  * @param status 
  * @returns 
  */
-export function infoStatusString(status: number): string {
+export function infoStatusStr(status: number): string {
   const statusArry = {
     1:'未开始',
     2:'进行中', 
     3:'已结束'
+  }
+  return statusArry[status]
+}
+
+export function playerStatusStr(status: number): string {
+  const statusArry = {
+    0:'待审核',
+    1:'审核通过', 
+    2:'删除',
+    3:'停止投票'
   }
   return statusArry[status]
 }

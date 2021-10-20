@@ -74,6 +74,12 @@ export const otherRouter:Array<IMenubarList> = [
               path: '/vote/list/:voteId/player/list/:playerId/record',
               component: () => import('/@/views/vote/player/record.vue'),
               meta: { title: '投票列表', icon: 'el-icon-s-finance', hidden: true }
+            },
+            {
+              name: 'voteListPlayerEdit',
+              path: '/vote/list/:voteId/player/:playerId/edit',
+              component: () => import('/@/views/vote/player/create.vue'),
+              meta: { title: '编辑选手', icon: 'el-icon-s-finance' }
             }]
           },
           {

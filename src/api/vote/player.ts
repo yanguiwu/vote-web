@@ -6,7 +6,8 @@ const api = {
   editPlayer: '/vote/sub-edit',
   queryPlayerList: '/vote/sub-query-list',
   queryPlayer: '/vote/sub-query',
-  editPlayerStatus : '/vote/sub-status-edit'
+  editPlayerStatus : '/vote/sub-status-edit',
+  playerTodayStar : '/vote/today-star'
 }
 
 export function createPlayer(postData: any):Promise<AxiosResponse<IResponse>> {
@@ -44,6 +45,14 @@ export function queryPlayer(postData: any):Promise<AxiosResponse<IResponse>> {
 export function editPlayerStatus(postData: any):Promise<AxiosResponse<IResponse>> {
   return request({
     url: api.editPlayerStatus,
+    method: 'post',
+    data: postData
+  })
+}
+
+export function playerTodayStar(postData: any):Promise<AxiosResponse<IResponse>> {
+  return request({
+    url: api.playerTodayStar,
     method: 'post',
     data: postData
   })

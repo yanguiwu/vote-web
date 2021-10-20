@@ -5,7 +5,7 @@
         <div class='justify-between'>
           <span>创建选手</span>
           <span>
-            <el-button type='success' size='mini'>返回</el-button>
+            <el-button type='success' size='mini' @click='handleBack'>返回</el-button>
           </span>
         </div>
       </template>
@@ -78,12 +78,7 @@ export default defineComponent({
     }
     const imageUrls = ref([])
     const actionUrl = `${import.meta.env.VITE_BASE_URL}/sys-file/img-upload `
-    const formData = ref({ 
-      isAnonymou: 1,
-      isExamine: 1,
-      isPayOrder: 1,
-      isRandomVote: 1
-    })
+    const formData = ref({ })
     const formRules = {
       name: [
         { required: true, message: '请输入活动名称', trigger: 'blur' },
@@ -162,18 +157,26 @@ export default defineComponent({
       })
     }
 
+    const handleBack = () => {
+      router.push({
+        name: 'voteListPlayerListIndex',
+        params: {
+          voteId: route.params.voteId
+        }
+      })
+    }
+
     const viewPlayerInfo = async() => {
-      let data = await queryPlayer({ id: route.params.playerId })
-      let { ...other } = data.data.body
+      let { playerId,voteId } = route.params
+      let data = await queryPlayer({ id:playerId, infoId: voteId })
+      let { fileWebPath, imgId,status,createUser,createTime,...other } = data.data.body
       formData.value = { 
         ...other
       }
-      imageUrls.value = bannerArr && bannerArr.map((item) => {
-        return {
-          id:item.id,
-          url: item.fileWebPath
-        }
-      }) || []
+      imageUrls.value = fileWebPath && imgId ? [{
+        id: imgId,
+        url: fileWebPath
+      }] : []
     }
 
     onMounted(() => {
@@ -193,7 +196,8 @@ export default defineComponent({
       beforeAvatarUpload,
       handleAvatarSuccess,
       beforeRemove,
-      onRemove 
+      onRemove,
+      handleBack
     }
   }
 })

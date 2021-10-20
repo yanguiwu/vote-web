@@ -16,13 +16,12 @@
         <el-button type='primary' size='mini' @click='handleSearch'>搜索</el-button>
         <el-button type='primary' size='mini'>全部</el-button>
         <!-- <el-button type='primary' size='mini'>数据导出</el-button> -->
-        <el-button type='primary' size='mini'>批量删除</el-button>
-        <el-button type='danger' size='mini'>一键随机修改票数（1-10）</el-button>
-        <el-button type='danger' size='mini'>一键随机修改票数（10-30）</el-button>
       </el-form-item>
     </el-form>
-    <el-table :data='listData' border>
+    <el-table :data='listData' border @selection-change='handleSelectionChange'>
+      <el-table-column type='selection' width='55' />
       <el-table-column
+        width='60px'
         prop='infoSeq'
         label='选手编号'
       />
@@ -74,47 +73,74 @@
         label='备注'
       />
       <el-table-column
-        prop='invitationName'
         label='状态'
-      />
-      <el-table-column label='操作' width='280px'>
+        width='95px'
+      >
+        <template #default='scope'>
+          <el-button
+            v-if='scope.row.status == 1'
+            size='mini'
+            type='info'
+            @click='()=>handleChangeStatus(scope.row.id, 3)'
+          >允许投票</el-button>
+          <el-button
+            v-if='scope.row.status == 3'
+            size='mini'
+            type='danger'
+            @click='()=>handleChangeStatus(scope.row.id, 1)'
+          >停止投票</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label='操作' width='230px'>
         <template #default='scope'>
           <el-button
             size='mini'
-            type='primary'
+            type='info'
             class='mb-2'
           >复制选手链接</el-button>
           <el-button
             size='mini'
-            type='primary'
+            type='info'
             class='mb-2'
             @click='()=>handleGoPlayer(scope.row.id)'
           >数据记录</el-button>
           <div>
             <el-button
               size='mini'
-              type='primary'
-            >设为今日之星</el-button>
+              :type='scope.row.todayStar ? "danger": "info"'
+              @click='()=>handleStart(scope.row.id,scope.row.todayStar)'
+            >
+              {{ scope.row.todayStar ? '今日之星' : '设为今日之星' }}</el-button>
             <el-button
               size='mini'
-              type='primary'
+              type='info'
+              @click='()=>handleEdit(scope.row.id)'
             >修改</el-button>
             <el-button
               size='mini'
-              type='primary'
+              type='info'
+              @click='()=>handleChangeStatus(scope.row.id, 2)'
             >删除</el-button>
           </div>
         </template>
       </el-table-column>
     </el-table>
+    <div class='mt-3'>
+      <el-button type='primary' size='mini' @click='handleBetchDelete'>批量删除</el-button>
+      <el-button type='danger' size='mini'>一键随机修改票数（1-10）</el-button>
+      <el-button type='danger' size='mini'>一键随机修改票数（10-30）</el-button>
+    </div>
+    <el-pagination layout='prev, pager, next' :total='pageData.recordCount' @current-change='pCurrentChange' />
   </el-card>
 </template>
   
 <script lang="ts">
 import { ref,defineComponent, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { queryPlayerList } from '/@/api/vote/player'
-import { DateStringConvert } from '/@/utils/tools'
+import { queryPlayerList, editPlayerStatus, playerTodayStar } from '/@/api/vote/player'
+import { DateStringConvert , playerStatusStr } from '/@/utils/tools'
+import { ElMessage, ElMessageBox } from 'element-plus'
+
 export default defineComponent({
   emits:['on-search'],
   setup(props:any, context: any) {
@@ -122,9 +148,11 @@ export default defineComponent({
     const route = useRoute()
     const formData = ref({ userName:'',invitationName: '',mobile: '' })
     const listData = ref([])
+    const multipleSelection = ref([])
     let pageData = ref({
       current: 1,
-      size: 10
+      size: 10,
+      recordCount: 0
     })
     const handleSearch = () => {
       initListData()
@@ -144,8 +172,58 @@ export default defineComponent({
         params: {
           voteId: route.params.voteId
         }
-
       })
+      
+    }
+    const handleEdit = (id:number) => {
+      router.push({
+        name: 'voteListPlayerEdit',
+        params: {
+          voteId: route.params.voteId,
+          playerId: id
+        }
+      })
+    }
+    const handleStart = async(id:number, todayStar: number) => {
+      await playerTodayStar({
+        subId: id,
+        todayStar: todayStar ? 0 : 1,
+        infoId:route.params.voteId
+      })
+      ElMessage.success('操作成功')
+      initListData()
+    }
+
+    const changeStatus = async(id:number| string, status: number) => {
+      await editPlayerStatus({
+        id,
+        status,
+        infoId:route.params.voteId
+      })
+      ElMessage.success('操作成功')
+      initListData()
+    }
+    const handleChangeStatus = (id:number | string, status: number) => {
+      if(status === 2) {
+        ElMessageBox.confirm('确认删除选手？','提示',{
+          cancelButtonText: '取消',
+          confirmButtonText: '确认'
+        }).then(() => {
+          changeStatus(id,status)
+        })
+        return
+      }
+      changeStatus(id,status)
+    }
+
+    const handleBetchDelete = () => {
+      if(!multipleSelection.value.length) {
+        ElMessage.warning('请选择需要操作的数据')
+        return 
+      }
+      handleChangeStatus(multipleSelection.value.map((item) => {
+        return item.id
+      }).join(','),2)
     }
 
     const initListData = async() => {
@@ -156,8 +234,22 @@ export default defineComponent({
       })
       let { data,...other } = datas.data.body
       listData.value = data
-      pageData = { ...other }
+      pageData.value = { ...other }
     }
+
+    const pCurrentChange = (current: number) => {
+      pageData.value = {
+        ...pageData.value,
+        current
+      }
+      initListData()
+    }
+
+    const handleSelectionChange = (value: any) => {
+      multipleSelection.value = value
+    }
+
+
     onMounted(() => {
       initListData()
     })
@@ -167,9 +259,16 @@ export default defineComponent({
       formData,
       pageData,
       handleSearch,
+      handleEdit,
       handleGoPlayer,
       handleCreateClick,
-      DateStringConvert
+      DateStringConvert,
+      playerStatusStr,
+      handleChangeStatus,
+      handleStart,
+      pCurrentChange,
+      handleSelectionChange,
+      handleBetchDelete
     }
   }
 })
