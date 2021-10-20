@@ -17,18 +17,24 @@
         <el-button type='danger' size='mini'>全部活动</el-button>
         <el-button type='primary' size='mini'>进行中</el-button>
         <el-button type='primary' size='mini'>已结束</el-button>
+        <el-button type='primary' size='mini'>未开始</el-button>
         <el-button type='primary' size='mini'>今日开始</el-button>
         <el-button type='primary' size='mini'>今日结束</el-button>
-        <el-button type='primary' size='mini'>未开始</el-button>
-        <el-button type='primary' size='mini'>礼物记录</el-button>
-        <el-button type='primary' size='mini'>投票记录</el-button>
-        <el-button type='primary' size='mini'>举报记录</el-button>
-        <el-button type='primary' size='mini'>刷新</el-button>
-        <el-button type='primary' size='mini'>2021-10-10</el-button>
-        <el-button type='primary' size='mini'>2021-10-11</el-button>
-        <el-button type='primary' size='mini'>2021-10-12</el-button>
+        <div>
+          <el-button type='primary' size='mini'>礼物记录</el-button>
+          <el-button type='primary' size='mini'>投票记录</el-button>
+          <el-button type='primary' size='mini'>举报记录</el-button>
+          <el-button type='primary' size='mini'>刷新</el-button>
+          <el-button type='primary' size='mini'>2021-10-10</el-button>
+          <el-button type='primary' size='mini'>2021-10-11</el-button>
+          <el-button type='primary' size='mini'>2021-10-12</el-button>
+        </div>
       </el-form-item>
     </el-form>
+    <el-divider class='mt-1 mb-4' />
+    <div class='mb-2'>
+      <el-button type='danger' size='mini' @click='handleBetchDelete'>批量删除</el-button>
+    </div>
     <el-table :data='listData' border @selection-change='handleSelectionChange'>
       <el-table-column type='selection' width='55' :selectable='selectable' />
       <el-table-column
@@ -161,9 +167,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class='mt-3'>
-      <el-button type='danger' size='mini' @click='handleBetchDelete'>批量删除</el-button>
-    </div>
+    
     <el-pagination layout='prev, pager, next' :total='pageData.recordCount' @current-change='pCurrentChange' />
   </el-card>
 </template>

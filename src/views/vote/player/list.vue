@@ -2,10 +2,18 @@
   <el-card>
     <template #header>	
       <div class='justify-between'>
-        <span>选手列表</span>
+        <span>
+          <span v-if='voteData.status == 1'>
+            <el-button v-if='voteData.infoStatus == 2' size='mini' type='success'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
+            <el-button v-else size='mini' type='primary'>活动{{ infoStatusStr(voteData.infoStatus) }}</el-button>
+          </span>
+          <el-button v-if='voteData.status == 3' size='mini' type='warning'>已关闭</el-button>
+          <el-button v-if='voteData.status == 0' size='mini' type='warning'>未开启</el-button>
+          活动：{{ voteData.title }}
+        </span>
         <span>
           <el-button type='success' size='mini' @click='handleCreateClick'>添加选手</el-button>
-          <el-button type='success' size='mini'>批量添加</el-button>
+          <el-button type='success' size='mini' @click='handleBetchClick'>批量添加</el-button>
         </span>
       </div>
     </template>
@@ -14,10 +22,17 @@
         <el-input v-model='formData.userName' size='mini' placeholder='输入选手名称关键字' style='width: 146px' class='mr-2' />
         <el-input v-model='formData.id' size='mini' placeholder='输入ID' style='width: 146px' class='mr-2' />
         <el-button type='primary' size='mini' @click='handleSearch'>搜索</el-button>
-        <el-button type='primary' size='mini'>全部</el-button>
+        <el-button type='primary' size='mini' class='mr-5'>全部</el-button>
         <!-- <el-button type='primary' size='mini'>数据导出</el-button> -->
+        
       </el-form-item>
     </el-form>
+    <el-divider class='mt-1 mb-4' />
+    <div class='mb-2'>
+      <el-button type='danger' size='mini' @click='handleBetchDelete'>批量删除</el-button>
+      <el-button type='danger' size='mini' @click='handleChangeTicket(1,10)'>一键随机修改票数（1-10）</el-button>
+      <el-button type='danger' size='mini' @click='handleChangeTicket(10,30)'>一键随机修改票数（10-30）</el-button>
+    </div>
     <el-table :data='listData' border @selection-change='handleSelectionChange'>
       <el-table-column type='selection' width='55' />
       <el-table-column
@@ -44,7 +59,9 @@
       />
       <el-table-column label='票数'>
         <template #default='scope'>
-          {{ scope.row.gender }}
+          票数:<span class='color-danger'>{{ scope.row.ticketNum }}</span>
+          <br>
+          总:{{ scope.row.orderTicketNum + scope.row.ticketNum + scope.row.initialTicketNum }}
         </template>
       </el-table-column>
       <el-table-column
@@ -52,7 +69,7 @@
         label='礼物'
       />
       <el-table-column
-        prop='invitationName'
+        prop='viewNum'
         label='浏览次数'
       />
       <el-table-column
@@ -125,20 +142,17 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class='mt-3'>
-      <el-button type='primary' size='mini' @click='handleBetchDelete'>批量删除</el-button>
-      <el-button type='danger' size='mini'>一键随机修改票数（1-10）</el-button>
-      <el-button type='danger' size='mini'>一键随机修改票数（10-30）</el-button>
-    </div>
-    <el-pagination layout='prev, pager, next' :total='pageData.recordCount' @current-change='pCurrentChange' />
+   
+    <el-pagination layout='prev, pager, next' :total='pageData.recordCount' :page-size='pageData.size' @current-change='pCurrentChange' />
   </el-card>
 </template>
   
 <script lang="ts">
 import { ref,defineComponent, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { queryPlayerList, editPlayerStatus, playerTodayStar } from '/@/api/vote/player'
-import { DateStringConvert , playerStatusStr } from '/@/utils/tools'
+import { queryVote } from '/@/api/vote/index'
+import { queryPlayerList, editPlayerStatus, playerTodayStar, updateRandomTicket } from '/@/api/vote/player'
+import { DateStringConvert , playerStatusStr,infoStatusStr } from '/@/utils/tools'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 export default defineComponent({
@@ -146,12 +160,13 @@ export default defineComponent({
   setup(props:any, context: any) {
     const router = useRouter()
     const route = useRoute()
-    const formData = ref({ userName:'',invitationName: '',mobile: '' })
-    const listData = ref([])
-    const multipleSelection = ref([])
+    let formData = ref({ userName:'',invitationName: '',mobile: '' })
+    let listData = ref([])
+    let multipleSelection = ref([])
+    let voteData = ref({})
     let pageData = ref({
       current: 1,
-      size: 10,
+      size: 20,
       recordCount: 0
     })
     const handleSearch = () => {
@@ -173,7 +188,14 @@ export default defineComponent({
           voteId: route.params.voteId
         }
       })
-      
+    }
+    const handleBetchClick = () => {
+      router.push({
+        name: 'voteListPlayerBetchCreate',
+        params: {
+          voteId: route.params.voteId
+        }
+      })
     }
     const handleEdit = (id:number) => {
       router.push({
@@ -248,16 +270,35 @@ export default defineComponent({
     const handleSelectionChange = (value: any) => {
       multipleSelection.value = value
     }
-
-
-    onMounted(() => {
+    const handleChangeTicket = async(min: number,max:number) => {
+      if(!multipleSelection.value.length) {
+        ElMessage.warning('请选择需要操作的数据')
+        return 
+      }
+      await updateRandomTicket({
+        infoId:route.params.voteId,
+        subIdArr:multipleSelection.value.map((item) => {
+          return item.id
+        }).join(','),
+        maxTicketNum:max,
+        minTicketNum:min
+      })
+      ElMessage.success('操作成功')
       initListData()
+    }
+    onMounted(async() => {
+      initListData()
+      let datas = await queryVote({
+        id: route.params.voteId
+      })
+      voteData.value = datas.data.body
     })
 
     return {
       listData,
       formData,
       pageData,
+      voteData,
       handleSearch,
       handleEdit,
       handleGoPlayer,
@@ -268,7 +309,10 @@ export default defineComponent({
       handleStart,
       pCurrentChange,
       handleSelectionChange,
-      handleBetchDelete
+      handleBetchDelete,
+      handleChangeTicket,
+      handleBetchClick,
+      infoStatusStr
     }
   }
 })

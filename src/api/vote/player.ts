@@ -7,7 +7,8 @@ const api = {
   queryPlayerList: '/vote/sub-query-list',
   queryPlayer: '/vote/sub-query',
   editPlayerStatus : '/vote/sub-status-edit',
-  playerTodayStar : '/vote/today-star'
+  playerTodayStar : '/vote/today-star',
+  updateRandomTicket : '/vote/update-random-ticket'
 }
 
 export function createPlayer(postData: any):Promise<AxiosResponse<IResponse>> {
@@ -58,4 +59,10 @@ export function playerTodayStar(postData: any):Promise<AxiosResponse<IResponse>>
   })
 }
 
-
+export function updateRandomTicket(postData: any):Promise<AxiosResponse<IResponse>> {
+  return request({
+    url: api.updateRandomTicket,
+    method: 'post',
+    data: postData
+  })
+}

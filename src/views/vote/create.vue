@@ -30,6 +30,7 @@
         </el-form-item>
         <el-form-item label='上传banner图:'>
           <el-upload
+            :multiple='false'
             class='avatar-uploader'
             :action='actionUrl'
             :on-success='handleAvatarSuccess'

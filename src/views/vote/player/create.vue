@@ -9,7 +9,31 @@
           </span>
         </div>
       </template>
-      <el-form ref='ruleForm' :model='formData' label-width='160px' :rules='formRules'>
+      <el-form v-if='isBetch' ref='ruleForm' :model='formData' label-width='160px' :rules='formRules'>
+        <el-form-item label='图片:'>
+          <el-upload
+            ref='betchUploader'
+            :multiple='true'
+            class='avatar-uploader'
+            :action='actionUrl'
+            :on-success='handleAvatarSuccess'
+            :before-remove='beforeRemove'
+            :on-remove='onRemove'
+            :before-upload='beforeAvatarUpload'
+            :headers='header'
+            name='uploadFile'
+            list-type='picture'
+          >
+            <el-button>
+              上传图片<i class='el-icon-plus avatar-uploader-icon' />
+            </el-button> 
+          </el-upload>
+        </el-form-item>
+        <el-form-item>
+          <el-button type='primary' class='mr-10' @click='handleBetchSave'>保存</el-button>
+        </el-form-item>
+      </el-form>
+      <el-form v-if='!isBetch' ref='ruleForm' :model='formData' label-width='160px' :rules='formRules'>
         <el-form-item label='店铺名称' prop='name'>
           <el-input v-model='formData.name' size='small' placeholder='店铺名称' style='width: 50%;' />
         </el-form-item>
@@ -41,6 +65,9 @@
               上传图片<i class='el-icon-plus avatar-uploader-icon' />
             </el-button> 
           </el-upload>
+          <div>
+            图片格式尺寸：380*300，格式jpg,png
+          </div>
         </el-form-item>
         <el-form-item>
           <el-button type='primary' class='mr-10' @click='handleSave'>保存</el-button>
@@ -69,6 +96,7 @@ export default defineComponent({
     }
   },
   setup() {
+    const betchUploader = ref(null)
     const ruleForm = ref(null)
     const { getStatus } = useLayoutStore()
     const router = useRouter()
@@ -77,6 +105,7 @@ export default defineComponent({
       'x-auth-token': getStatus.ACCESS_TOKEN
     }
     const imageUrls = ref([])
+    const isBetch = ref(route.name === 'voteListPlayerBetchCreate')
     const actionUrl = `${import.meta.env.VITE_BASE_URL}/sys-file/img-upload `
     const formData = ref({ })
     const formRules = {
@@ -101,11 +130,12 @@ export default defineComponent({
       }
       return true
     }
-    const handleAvatarSuccess = (res: any, file: any) => {
+    const handleAvatarSuccess = (res: any, file: any, fileList) => {
       if(res.code === 0) {
         imageUrls.value.push({
           ...res.body,
-          isHandle: true
+          isHandle: true,
+          name: file.name
         })
       }else if(res.code === 8888) {
         router.push('/login')
@@ -134,7 +164,7 @@ export default defineComponent({
         return
       }
       if(!imageUrls.value.length) {
-        ElMessage.error('请至少上传一张banner图:')
+        ElMessage.error('请上传图片:')
         return
       }
       let data = {
@@ -155,6 +185,24 @@ export default defineComponent({
           voteId: route.params.voteId
         }
       })
+    }
+
+    const handleBetchSave = () => {
+      if(!imageUrls.value.length) {
+        ElMessage.error('请上传图片:')
+        return
+      }
+      imageUrls.value.forEach(async(item) => {
+        let _name = item.name.split('.')
+        let data = {
+          name: _name.length ? _name[0] : item.id,
+          imgId:item.id,
+          infoId: route.params.voteId
+        }
+        await createPlayer(data)
+      })
+      ElMessage.success('创建成功')
+      handleBack()
     }
 
     const handleBack = () => {
@@ -192,12 +240,15 @@ export default defineComponent({
       header,
       imageUrls,
       ruleForm,
+      betchUploader,
       handleSave,
       beforeAvatarUpload,
       handleAvatarSuccess,
       beforeRemove,
       onRemove,
-      handleBack
+      handleBack,
+      handleBetchSave,
+      isBetch
     }
   }
 })

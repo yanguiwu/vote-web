@@ -87,6 +87,12 @@ export const otherRouter:Array<IMenubarList> = [
             path: '/vote/list/:voteId/player/create',
             component: () => import('/@/views/vote/player/create.vue'),
             meta: { title: '添加选手', icon: 'el-icon-s-finance' }
+          },
+          {
+            name: 'voteListPlayerBetchCreate',
+            path: '/vote/list/:voteId/player/betch-create',
+            component: () => import('/@/views/vote/player/create.vue'),
+            meta: { title: '添加选手', icon: 'el-icon-s-finance' }
           }]
         },{
           name: 'voteListComplain',
