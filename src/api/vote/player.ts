@@ -9,6 +9,7 @@ const api = {
   editPlayerStatus : '/vote/sub-status-edit',
   playerTodayStar : '/vote/today-star',
   updateRandomTicket : '/vote/update-random-ticket'
+  
 }
 
 export function createPlayer(postData: any):Promise<AxiosResponse<IResponse>> {

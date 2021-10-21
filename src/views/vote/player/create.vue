@@ -153,8 +153,8 @@ export default defineComponent({
       }
       return imageDelete({
         id:file.id,
-        actId: route.params.voteId,
-        type:'voteInfo'
+        actId: route.params.playerId,
+        type:'voteSub'
       })
     }
 
@@ -217,7 +217,7 @@ export default defineComponent({
     const viewPlayerInfo = async() => {
       let { playerId,voteId } = route.params
       let data = await queryPlayer({ id:playerId, infoId: voteId })
-      let { fileWebPath, imgId,status,createUser,createTime,...other } = data.data.body
+      let { fileWebPath, imgId,status,createUser,createTime,ticketNum,todayStar,viewNum,initialTicketNum,initialNum,infoSeq,orderTicketNum,...other } = data.data.body
       formData.value = { 
         ...other
       }

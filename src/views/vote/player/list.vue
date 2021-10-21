@@ -5,7 +5,7 @@
         <span>
           <span v-if='voteData.status == 1'>
             <el-button v-if='voteData.infoStatus == 2' size='mini' type='success'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
-            <el-button v-else size='mini' type='primary'>活动{{ infoStatusStr(voteData.infoStatus) }}</el-button>
+            <el-button v-else size='mini' type='warning'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
           </span>
           <el-button v-if='voteData.status == 3' size='mini' type='warning'>已关闭</el-button>
           <el-button v-if='voteData.status == 0' size='mini' type='warning'>未开启</el-button>

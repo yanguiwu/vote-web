@@ -8,6 +8,7 @@ const api = {
   queryVote: '/vote/query',
   copyVote : '/vote/copy-vote',
   editStatus : '/vote/edit-status',
+  voteLogQueryList: '/vote/vote-log-query-list'
 }
 
 export function createVote(postData: any):Promise<AxiosResponse<IResponse>> {
@@ -58,5 +59,12 @@ export function queryVote(postData: any):Promise<AxiosResponse<IResponse>> {
   })
 }
 
+export function voteLogQueryList(postData: any):Promise<AxiosResponse<IResponse>> {
+  return request({
+    url: api.voteLogQueryList,
+    method: 'post',
+    data: postData
+  })
+}
 
 
