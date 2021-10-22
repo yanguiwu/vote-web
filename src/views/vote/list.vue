@@ -73,9 +73,19 @@
       <el-table-column
         prop='invitationName'
         label='浏览量'
+        width='120px'
       >
         <template #default='scope'>
           {{ scope.row.visitNum + scope.row.initialNum }}
+          <div class='justify-between'>
+            <el-input
+              v-model='listData[scope.$index].addInitialNum'
+              style='width: 60px;'
+              type='number'
+              size='mini'
+            />
+            <el-button icon='el-icon-plus' size='mini' @click='() => handleAddVisitNum(scope.row)' />
+          </div>
         </template>
       </el-table-column>
       <el-table-column
@@ -175,7 +185,7 @@
 <script lang="ts">
 import { ref,defineComponent, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { queryVoteList, copyVote, editStatus } from '/@/api/vote/index'
+import { queryVoteList, copyVote, editStatus, voteUpdateView } from '/@/api/vote/index'
 import { ElMessage , ElMessageBox } from 'element-plus'
 import { DateStringConvert, statusStr, infoStatusStr } from '/@/utils/tools'
 export default defineComponent({
@@ -207,7 +217,12 @@ export default defineComponent({
         ...pageData.value
       })
       let { data,...other } = datas.data.body
-      listData.value = data
+      listData.value = data.map((item) => {
+        return {
+          ...item,
+          addInitialNum: ''
+        }
+      })
       pageData.value = { ...other }
     }
     const pCurrentChange = (current: number) => {
@@ -258,6 +273,19 @@ export default defineComponent({
         initListData()
       })
     }
+    const handleAddVisitNum = async(row: any) => {
+      if(!row.addInitialNum) {
+        ElMessage.success('请输入需要增加的浏览量')
+        return
+      }
+      await voteUpdateView({
+        type: 'info' ,
+        infoId: row.id,
+        viemNum: row.addInitialNum
+      }) 
+      ElMessage.success('操作成功')
+      initListData()
+    }
     const selectable = (row: any) => {
       return row.status === 0 || row.status === 3 
     }
@@ -292,7 +320,8 @@ export default defineComponent({
       pCurrentChange,
       handleBetchDelete,
       handleSelectionChange,
-      selectable
+      selectable,
+      handleAddVisitNum
     }
   }
 })

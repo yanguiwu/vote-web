@@ -57,11 +57,26 @@
         prop='phone'
         label='手机号'
       />
-      <el-table-column label='票数'>
+      <el-table-column label='票数' min-width='120px'>
         <template #default='scope'>
           票数:<span class='color-danger'>{{ scope.row.ticketNum }}</span>
           <br>
           总:{{ scope.row.orderTicketNum + scope.row.ticketNum + scope.row.initialTicketNum }}
+          <br>
+          <el-input
+            v-model='listData[scope.$index].addInitialTicketNum'
+            style='width: 60px;'
+            type='number'
+            size='mini'
+          />
+          <el-tooltip
+            class='item'
+            effect='dark'
+            content='加票输入正数，减票输入负数'
+            placement='top'
+          >
+            <el-button icon='el-icon-plus' size='mini' @click='() => handleAddInitialTicketNum(scope.row)' />
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column
@@ -172,6 +187,20 @@ export default defineComponent({
     const handleSearch = () => {
       initListData()
     }
+    const handleAddInitialTicketNum = async(row: any) => {
+      if(!row.addInitialTicketNum) {
+        ElMessage.success('请输入需要增加的浏览量')
+        return
+      }
+      await updateRandomTicket({
+        infoId:route.params.voteId,
+        subIdArr:row.id,
+        maxTicketNum:Number(row.addInitialTicketNum),
+        minTicketNum:Number(row.addInitialTicketNum)
+      }) 
+      ElMessage.success('操作成功')
+      initListData()
+    }
     const handleGoPlayer = (id:number) => {
       router.push({
         name: 'voteListPlayerListRecord',
@@ -255,7 +284,12 @@ export default defineComponent({
         ...pageData.value
       })
       let { data,...other } = datas.data.body
-      listData.value = data
+      listData.value = data.map((item) => {
+        return {
+          ...item,
+          addInitialTicketNum: ''
+        }
+      })
       pageData.value = { ...other }
     }
 
@@ -312,7 +346,8 @@ export default defineComponent({
       handleBetchDelete,
       handleChangeTicket,
       handleBetchClick,
-      infoStatusStr
+      infoStatusStr,
+      handleAddInitialTicketNum
     }
   }
 })

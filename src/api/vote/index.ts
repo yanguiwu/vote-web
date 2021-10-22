@@ -13,7 +13,8 @@ const api = {
   voteEditTask: '/vote/edit-task',
   voteQueryTask: '/vote/task-query',
   voteQueryTaskList: '/vote/task-query-list',
-  voteEditTaskStatus: '/vote/edit-task-status'
+  voteEditTaskStatus: '/vote/edit-task-status',
+  voteUpdateView: 'vote/update-view',
 }
 
 export function createVote(postData: any):Promise<AxiosResponse<IResponse>> {
@@ -107,6 +108,14 @@ export function voteQueryTaskList(postData: any):Promise<AxiosResponse<IResponse
 export function voteEditTaskStatus(postData: any):Promise<AxiosResponse<IResponse>> {
   return request({
     url: api.voteEditTaskStatus,
+    method: 'post',
+    data: postData
+  })
+}
+
+export function voteUpdateView(postData: any):Promise<AxiosResponse<IResponse>> {
+  return request({
+    url: api.voteUpdateView,
     method: 'post',
     data: postData
   })
