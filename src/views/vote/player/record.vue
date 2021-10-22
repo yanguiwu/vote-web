@@ -2,7 +2,7 @@
   <el-card>
     <template #header>	
       <div class='justify-between'>
-        <span>投票列表</span>
+        <span>活动投票列表</span>
         <span>
           <el-button type='success' size='mini' @click='goBack'>返回</el-button>
         </span>
@@ -29,7 +29,7 @@
       />
       <el-table-column
         prop='infoTitle'
-        label='活动'
+        label='活动名称'
       />
       <el-table-column
         prop='phone'

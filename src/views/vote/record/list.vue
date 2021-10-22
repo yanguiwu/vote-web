@@ -29,7 +29,7 @@
       />
       <el-table-column
         prop='infoTitle'
-        label='活动'
+        label='活动名称'
       />
       <el-table-column
         prop='phone'

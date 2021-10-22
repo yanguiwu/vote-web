@@ -111,7 +111,7 @@ export const otherRouter:Array<IMenubarList> = [
           meta: { title: '投票', icon: 'el-icon-s-finance', hidden: true }
         },{
           name: 'voteListRand',
-          path: '/vote/list/:voteId/rand',
+          path: '/vote/list/rand',
           redirect: {
             name: 'voteListRandList'
           },
@@ -120,8 +120,22 @@ export const otherRouter:Array<IMenubarList> = [
           children: [{
             name: 'voteListRandList',
             path: '/vote/list/:voteId/rand/list',
-            component: () => import('/@/views/vote/rand/list.vue'),
-            meta: { title: '列表', icon: 'el-icon-s-finance', hidden: true,hiddenBreadcrumb: true }
+            component: Components['LayoutBlank'],
+            redirect: {
+              name: 'voteListRandListIndex'
+            },
+            meta: { title: '列表', icon: 'el-icon-s-finance', hidden: true,hiddenBreadcrumb: true },
+            children: [{
+              name: 'voteListRandListIndex',
+              path: '/vote/list/:voteId/rand/list/index',
+              component: () => import('/@/views/vote/rand/list.vue'),
+              meta: { title: '列表', icon: 'el-icon-s-finance', hidden: true,hiddenBreadcrumb: true }
+            },{
+              name: 'voteListRandListEdit',
+              path: '/vote/list/:voteId/rand/:randId/edit',
+              component: () => import('/@/views/vote/rand/create.vue'),
+              meta: { title: '编辑定时投票', icon: 'el-icon-s-finance', hidden: true }
+            }]
           },{
             name: 'voteListRandCreate',
             path: '/vote/list/:voteId/rand/create',

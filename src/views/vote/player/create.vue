@@ -80,7 +80,6 @@
 <script lang="ts">
 import { ref,defineComponent, onMounted } from 'vue'
 import { useRouter ,useRoute } from 'vue-router'
-import CkEditor from '/@/components/CkEditor/index.vue'
 import { useLayoutStore } from '/@/store/modules/layout'
 import { imageDelete } from '/@/api/util'
 import { ElMessage } from 'element-plus'
@@ -88,7 +87,6 @@ import { validate } from '/@/utils/formExtend'
 import { createPlayer, editPlayer,queryPlayer } from '/@/api/vote/player'
 
 export default defineComponent({
-  components: { CkEditor },
   props: {
     listData: {
       type: Array,

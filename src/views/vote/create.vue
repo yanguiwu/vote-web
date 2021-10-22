@@ -57,16 +57,16 @@
           <CkEditor v-model='formData.prizeImgHtml' type='Full' />
         </el-form-item>
         <el-form-item label='活动开始时间:' prop='startTime'>
-          <el-date-picker v-model='formData.startTime' type='datetime' placeholder='活动开始时间' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' />
+          <el-date-picker v-model='formData.startTime' size='small' type='datetime' placeholder='活动开始时间' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' />
         </el-form-item>
         <el-form-item label='活动结束时间:' prop='endTime'>
-          <el-date-picker v-model='formData.endTime' type='datetime' placeholder='活动结束时间' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' />
+          <el-date-picker v-model='formData.endTime' size='small' type='datetime' placeholder='活动结束时间' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' />
         </el-form-item>
         <el-form-item label='投票开始时间:' prop='startVoteTime'>
-          <el-date-picker v-model='formData.startVoteTime' type='datetime' placeholder='投票开始时间' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' />
+          <el-date-picker v-model='formData.startVoteTime' size='small' type='datetime' placeholder='投票开始时间' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' />
         </el-form-item>
         <el-form-item label='投票结束时间:' prop='endVoteTime'>
-          <el-date-picker v-model='formData.endVoteTime' type='datetime' placeholder='投票结束时间' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' />
+          <el-date-picker v-model='formData.endVoteTime' size='small' type='datetime' placeholder='投票结束时间' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' />
         </el-form-item>
         <el-form-item label='自动锁定:'>
           每

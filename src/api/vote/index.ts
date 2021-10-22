@@ -8,7 +8,12 @@ const api = {
   queryVote: '/vote/query',
   copyVote : '/vote/copy-vote',
   editStatus : '/vote/edit-status',
-  voteLogQueryList: '/vote/vote-log-query-list'
+  voteLogQueryList: '/vote/vote-log-query-list',
+  voteAddTask: '/vote/add-task',
+  voteEditTask: '/vote/edit-task',
+  voteQueryTask: '/vote/task-query',
+  voteQueryTaskList: '/vote/task-query-list',
+  voteEditTaskStatus: '/vote/edit-task-status'
 }
 
 export function createVote(postData: any):Promise<AxiosResponse<IResponse>> {
@@ -67,4 +72,42 @@ export function voteLogQueryList(postData: any):Promise<AxiosResponse<IResponse>
   })
 }
 
+export function voteAddTask(postData: any):Promise<AxiosResponse<IResponse>> {
+  return request({
+    url: api.voteAddTask,
+    method: 'post',
+    data: postData
+  })
+}
 
+export function voteEditTask(postData: any):Promise<AxiosResponse<IResponse>> {
+  return request({
+    url: api.voteEditTask,
+    method: 'post',
+    data: postData
+  })
+}
+
+export function voteQueryTask(postData: any):Promise<AxiosResponse<IResponse>> {
+  return request({
+    url: api.voteQueryTask,
+    method: 'post',
+    data: postData
+  })
+}
+
+export function voteQueryTaskList(postData: any):Promise<AxiosResponse<IResponse>> {
+  return request({
+    url: api.voteQueryTaskList,
+    method: 'post',
+    data: postData
+  })
+}
+
+export function voteEditTaskStatus(postData: any):Promise<AxiosResponse<IResponse>> {
+  return request({
+    url: api.voteEditTaskStatus,
+    method: 'post',
+    data: postData
+  })
+}
