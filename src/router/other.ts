@@ -14,13 +14,13 @@ export const otherRouter:Array<IMenubarList> = [
     path: '/vote',
     component: Components['Layout'],
     redirect: '/vote/list',
-    meta: { title: '投票活动', icon: 'el-icon-s-check' },
+    meta: { title: '投票活动', icon: 'el-icon-present' },
     children: [
       {
         name: 'vote',
         path: '/vote/data',
         component: () => import('/@/views/vote/data.vue'),
-        meta: { title: '概况', icon: 'el-icon-s-finance' }
+        meta: { title: '数据统计', icon: 'el-icon-coin' }
       },
       {
         name: 'voteList',
@@ -165,17 +165,31 @@ export const otherRouter:Array<IMenubarList> = [
       }
     ]
   },{
-    name: 'user',
-    path: '/user',
+    name: 'staff',
+    path: '/staff',
     component: Components['Layout'],
-    redirect: '/user/role',
+    redirect: '/staff/list',
     meta: { title: '用户管理', icon: 'el-icon-s-check' },
     children: [
       {
-        name: 'userRole',
-        path: '/user/role',
-        component: () => import('/@/views/company/role.vue'),
-        meta: { title: '员工管理', icon: 'el-icon-s-custom' }
+        name: 'staffList',
+        path: '/staff/list',
+        component: () => import('/@/views/staff/list.vue'),
+        meta: { title: '用户管理', icon: 'el-icon-s-custom', hiddenBreadcrumb: true }
+      }
+    ]
+  },{
+    name: 'setting',
+    path: '/setting',
+    component: Components['Layout'],
+    redirect: '/setting/index',
+    meta: { title: '系统设置', icon: 'el-icon-s-tools' },
+    children: [
+      {
+        name: 'settingIndex',
+        path: '/setting/index',
+        component: () => import('/@/views/setting/index.vue'),
+        meta: { title: '系统设置', icon: 'el-icon-s-tools' , hiddenBreadcrumb: true }
       }
     ]
   }

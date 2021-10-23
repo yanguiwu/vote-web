@@ -195,12 +195,11 @@ export const useLayoutStore = defineStore({
       const res = await login(param)
       const { token,...other } = res.data.body
       this.status.ACCESS_TOKEN = token
-      this.userInfo = {...other }
+      this.userInfo = { ...other }
       setLocal('token', this.status, 1000 * 60 * 60)
       setLocal('user', this.userInfo)
       const { query } = router.currentRoute.value
-      router.push(typeof query.from === 'string' ? decode(query.from) : '/')
-
+      router.push(typeof query.from === 'string' ? decode(query.from) : '/vote')
     },
     async GenerateRoutes():Promise<void> {
       this.menubar.menuList = otherRouter

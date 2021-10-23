@@ -14,14 +14,14 @@ export const allowRouter: Array<IMenubarList> = [
     name: 'index',
     path: '/',
     component: Components['Layout'],
-    redirect: '/Dashboard/Workplace',
-    meta: { title: '仪表盘', icon: 'el-icon-eleme' },
+    redirect: '/my',
+    meta: { title: '个人中心', icon: 'el-icon-eleme' },
     children: [
       {
-        name: 'Workplace',
-        path: '/Dashboard/Workplace',
-        component: Components['Workplace'],
-        meta: { title: '工作台', icon: 'el-icon-s-platform' }
+        name: 'my',
+        path: '/my',
+        component: Components['my'],
+        meta: { title: '个人中心', icon: 'el-icon-s-platform', hiddenBreadcrumb: true }
       }
     ]
   },{

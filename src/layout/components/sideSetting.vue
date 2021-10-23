@@ -1,5 +1,5 @@
 <template>
-  <i class='el-icon-s-tools text-2xl px-2 py-1 cursor-pointer rounded-l-md' @click='drawer=!drawer' />
+  <i class='el-icon-s-tools px-1 py-1 cursor-pointer rounded-l-md tool-icon' @click='drawer=!drawer' />
   <el-drawer v-model='drawer' title='系统布局配置' size='260px'>
     <div class='p-4'>
       <el-row :gutter='20'>
@@ -69,3 +69,9 @@ export default defineComponent ({
   }
 })
 </script>
+
+<style>
+.tool-icon {
+  font-size: 18px;
+}
+</style>
