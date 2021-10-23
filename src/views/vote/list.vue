@@ -11,23 +11,24 @@
     </template>
     <el-form :inline='true' :model='formData' class='demo-form-inline'>
       <el-form-item>
-        <el-input v-model='formData.userName' size='mini' placeholder='输入主题名关键字' style='width: 146px' class='mr-5' />
-        开始日期：<el-input v-model='formData.mobile' size='mini' placeholder='输入手机号' style='width: 292px' class='mr-5' />
-        <el-button type='primary' size='mini' @click='handleSearch'>搜索</el-button>
-        <el-button type='danger' size='mini'>全部活动</el-button>
-        <el-button type='primary' size='mini'>进行中</el-button>
-        <el-button type='primary' size='mini'>已结束</el-button>
-        <el-button type='primary' size='mini'>未开始</el-button>
-        <el-button type='primary' size='mini'>今日开始</el-button>
-        <el-button type='primary' size='mini'>今日结束</el-button>
+        <el-input v-model='formData.title' size='mini' placeholder='输入主题名关键字' style='width: 146px' class='mr-2' />
+        开始日期：
+        <el-date-picker v-model='formData.startTime' size='small' type='datetime' style='width: 200px' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' />
+        <el-date-picker v-model='formData.endTime' size='small' type='datetime' style='width: 200px' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' class='mr-2' />
+        <el-button type='primary' size='mini' class='mr-5' @click='handleSearch'>搜索</el-button>
+        <el-button type='danger' size='mini' @click='()=>handleChangeFilter()'>全部活动</el-button>
+        <el-button type='primary' size='mini' @click='()=>handleChangeFilter("status", 2)'>进行中</el-button>
+        <el-button type='primary' size='mini' @click='()=>handleChangeFilter("status", 3)'>已结束</el-button>
+        <el-button type='primary' size='mini' @click='()=>handleChangeFilter("status", 1)'>未开始</el-button>
         <div>
+          <el-button type='primary' size='mini' @click='()=>handleChangeFilter("todayStatus", 4)'>今日开始</el-button>
+          <el-button type='primary' size='mini' @click='()=>handleChangeFilter("todayStatus", 5)'>今日结束</el-button>
           <el-button type='primary' size='mini'>礼物记录</el-button>
           <el-button type='primary' size='mini'>投票记录</el-button>
           <el-button type='primary' size='mini'>举报记录</el-button>
-          <el-button type='primary' size='mini'>刷新</el-button>
-          <el-button type='primary' size='mini'>2021-10-10</el-button>
+          <!-- <el-button type='primary' size='mini'>2021-10-10</el-button>
           <el-button type='primary' size='mini'>2021-10-11</el-button>
-          <el-button type='primary' size='mini'>2021-10-12</el-button>
+          <el-button type='primary' size='mini'>2021-10-12</el-button> -->
         </div>
       </el-form-item>
     </el-form>
@@ -188,28 +189,51 @@ import { useRouter } from 'vue-router'
 import { queryVoteList, copyVote, editStatus, voteUpdateView } from '/@/api/vote/index'
 import { ElMessage , ElMessageBox } from 'element-plus'
 import { DateStringConvert, statusStr, infoStatusStr } from '/@/utils/tools'
+const initPageData = () => {
+  return {
+    current: 1,
+    size: 10,
+    recordCount: 0,
+    count: 1
+  }
+}
+const initFormData = () => {
+  return { 
+    startTime: '',
+    endTime: '',
+    title: '',
+    status: '', // 1 未开始 2 进行中 3已结束
+    todayStatus: '' // 4 今日开始  5 今日结束
+  }
+}
 export default defineComponent({
   emits:['on-search'],
-  setup(props:any, context: any) {
+  setup() {
     const router = useRouter()
-    const formData = ref({ userName:'',invitationName: '',mobile: '' })
+    const formData = ref(initFormData())
     const listData = ref([])
     const multipleSelection = ref([])
-    let pageData = ref({
-      current: 1,
-      size: 10,
-      recordCount: 0,
-      count: 1
-    })
-    const currentId = ref()
-    const currentPage = ref(1)
-    const pageSize = ref(10)
-    const drawerVisable = ref(false)
+    let pageData = ref(initPageData())
     const handleSelectionChange = (value: any) => {
       multipleSelection.value = value
     }
     const handleSearch = () => {
-      context.emit('on-search', formData.value)
+      pageData.value = initPageData()
+      initListData()
+    }
+    const handleChangeFilter = (name?: string, value?: number) => {
+      pageData.value = initPageData()
+      if(name) {
+        formData.value = {
+          ...initFormData(),
+          [name]: value
+        }
+      }else {
+        formData.value = {
+          ...initFormData()
+        }
+      }
+      initListData()
     }
     const initListData = async() => {
       let datas = await queryVoteList({
@@ -305,9 +329,8 @@ export default defineComponent({
     return {
       listData,
       formData,
-      currentId,
-      drawerVisable,
       pageData,
+      handleChangeFilter,
       handleCopyVote,
       handleDelete,
       handleSearch,

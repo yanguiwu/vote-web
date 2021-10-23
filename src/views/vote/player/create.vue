@@ -13,6 +13,7 @@
         <el-form-item label='图片:'>
           <el-upload
             ref='betchUploader'
+            accept='image/png, image/jpeg'
             :multiple='true'
             class='avatar-uploader'
             :action='actionUrl'
@@ -21,8 +22,8 @@
             :on-remove='onRemove'
             :before-upload='beforeAvatarUpload'
             :headers='header'
-            name='uploadFile'
             list-type='picture'
+            name='uploadFile'
           >
             <el-button>
               上传图片<i class='el-icon-plus avatar-uploader-icon' />
@@ -117,14 +118,9 @@ export default defineComponent({
       ]
     }
     const beforeAvatarUpload = (file) => {
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        ElMessage.error('上传头像图片只能是 JPG 格式!')
-      }
-      if (!isLt2M) {
-        ElMessage.error('上传头像图片大小不能超过 2MB!')
+      if (file.size > 300 * 1024) {
+        ElMessage.error('上传头像图片大小不能超过 300kb!')
+        return false
       }
       return true
     }
@@ -146,6 +142,10 @@ export default defineComponent({
     }
 
     const beforeRemove = (file, fileList) => {
+      console.log(file)
+      if(!file.id) {
+        return true
+      }
       if(file.isHandle) {
         return true
       }

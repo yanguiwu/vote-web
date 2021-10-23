@@ -19,12 +19,10 @@
     </template>
     <el-form :inline='true' :model='formData' class='demo-form-inline'>
       <el-form-item>
-        <el-input v-model='formData.userName' size='mini' placeholder='输入选手名称关键字' style='width: 146px' class='mr-2' />
-        <el-input v-model='formData.id' size='mini' placeholder='输入ID' style='width: 146px' class='mr-2' />
-        <el-button type='primary' size='mini' @click='handleSearch'>搜索</el-button>
-        <el-button type='primary' size='mini' class='mr-5'>全部</el-button>
+        <el-input v-model='formData.name' size='mini' placeholder='输入选手名称关键字' style='width: 146px' class='mr-2' />
+        <el-button type='primary' size='mini' @click='()=>handleSearch()'>搜索</el-button>
+        <el-button type='primary' size='mini' class='mr-5' @click='()=>handleSearch(true)'>全部</el-button>
         <!-- <el-button type='primary' size='mini'>数据导出</el-button> -->
-        
       </el-form-item>
     </el-form>
     <el-divider class='mt-1 mb-4' />
@@ -59,9 +57,7 @@
       />
       <el-table-column label='票数' min-width='120px'>
         <template #default='scope'>
-          票数:<span class='color-danger'>{{ scope.row.ticketNum }}</span>
-          <br>
-          总:{{ scope.row.orderTicketNum + scope.row.ticketNum + scope.row.initialTicketNum }}
+          <span class='color-danger'>{{ scope.row.ticketNum }}</span> / {{ scope.row.orderTicketNum + scope.row.ticketNum + scope.row.initialTicketNum }}
           <br>
           <el-input
             v-model='listData[scope.$index].addInitialTicketNum'
@@ -175,7 +171,7 @@ export default defineComponent({
   setup(props:any, context: any) {
     const router = useRouter()
     const route = useRoute()
-    let formData = ref({ userName:'',invitationName: '',mobile: '' })
+    let formData = ref({ name:'',id: '' })
     let listData = ref([])
     let multipleSelection = ref([])
     let voteData = ref({})
@@ -184,7 +180,15 @@ export default defineComponent({
       size: 20,
       recordCount: 0
     })
-    const handleSearch = () => {
+    const handleSearch = (clear?: boolean) => {
+      if(clear) {
+        formData.value = { name:'',id: '' }
+      }
+      pageData.value = {
+        current: 1,
+        size: 20,
+        recordCount: 0
+      }
       initListData()
     }
     const handleAddInitialTicketNum = async(row: any) => {
