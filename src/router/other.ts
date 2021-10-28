@@ -198,13 +198,13 @@ export const otherRouter:Array<IMenubarList> = [
     path: '/shop-manage',
     component: Components['Layout'],
     redirect: '/shop-manage/index',
-    meta: { title: '系统设置', icon: 'el-icon-s-tools' },
+    meta: { title: '开通商户', icon: 'el-icon-s-tools' },
     children: [
       {
         name: 'shopManageIndex',
         path: '/shop-manage/index',
         component: () => import('/@/views/shop-manage/index.vue'),
-        meta: { title: '系统设置', icon: 'el-icon-s-tools' , hiddenBreadcrumb: true }
+        meta: { title: '开通商户', icon: 'el-icon-s-tools' , hiddenBreadcrumb: true }
       }
     ]
   }
