@@ -70,7 +70,8 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      window.CKEDITOR_UPLOAD_SERVER = 'http://api.yanguiwu.com/vote-api/sys-file/img-upload'
+      
+      window.CKEDITOR_UPLOAD_SERVER = `${import.meta.env.VITE_BASE_URL}/sys-file/img-upload `
       // CKEDITOR_UPLOAD_SERVER   文件上传的地址，如果不上传到第三方（七牛去）直接配置window.CKEDITOR_UPLOAD_SERVER="当前后端项目的上传地址"
       // CKEDITOR_UPLOAD_INIT     图片上传前授权地址（七牛云上传需授权）
       // CKEDITOR_UPLOAD_INIT     图片上传后处理（七牛云上传成功后需保存到业务）

@@ -24,7 +24,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
   const env = loadEnv(mode, root) as unknown as ImportMetaEnv
   const prodMock = true
   return {
-    base: env.VITE_BASE,
+    base: 'web',
     resolve: {
       alias: setAlias([
         ['/@', 'src'],
