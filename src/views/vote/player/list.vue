@@ -92,10 +92,14 @@
           {{ DateStringConvert(scope.row.createTime) }}
         </template>
       </el-table-column>
-      <el-table-column
+     <el-table-column
         prop='invitationName'
-        label='二维码'
-      />
+        label='链接'
+      >
+        <template #default='scope'>
+            <QrcodeVue :value='getUrl(scope.row)' size='60' level='H' />
+        </template>
+      </el-table-column>
       <el-table-column
         prop='remark'
         label='备注'
@@ -165,8 +169,13 @@ import { queryVote } from '/@/api/vote/index'
 import { queryPlayerList, editPlayerStatus, playerTodayStar, updateRandomTicket } from '/@/api/vote/player'
 import { DateStringConvert , playerStatusStr,infoStatusStr } from '/@/utils/tools'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import QrcodeVue from 'qrcode.vue'
+import { useLayoutStore } from '/@/store/modules/layout'
 
 export default defineComponent({
+  components:{
+    QrcodeVue
+  },
   emits:['on-search'],
   setup(props:any, context: any) {
     const router = useRouter()
@@ -180,6 +189,11 @@ export default defineComponent({
       size: 20,
       recordCount: 0
     })
+     const getUrl = (row) => {
+      const { getUserInfo,getUserListData } = useLayoutStore()
+      let apiDomain = getUserInfo.sysSetting && getUserInfo.sysSetting.apiDomain
+      return `${apiDomain || window.location.origin }/wx/#/pages/player/index?voteId=${row.id}&playerId=45`
+    }
     const handleSearch = (clear?: boolean) => {
       if(clear) {
         formData.value = { name:'',id: '' }
@@ -351,7 +365,8 @@ export default defineComponent({
       handleChangeTicket,
       handleBetchClick,
       infoStatusStr,
-      handleAddInitialTicketNum
+      handleAddInitialTicketNum,
+      getUrl
     }
   }
 })

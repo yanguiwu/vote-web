@@ -92,7 +92,11 @@
       <el-table-column
         prop='invitationName'
         label='链接'
-      />
+      >
+        <template #default='scope'>
+            <QrcodeVue :value='getUrl(scope.row)' size='60' level='H' />
+        </template>
+      </el-table-column>
       <el-table-column
         prop='infoStatus'
         label='状态'
@@ -189,6 +193,8 @@ import { useRouter } from 'vue-router'
 import { queryVoteList, copyVote, editStatus, voteUpdateView } from '/@/api/vote/index'
 import { ElMessage , ElMessageBox } from 'element-plus'
 import { DateStringConvert, statusStr, infoStatusStr } from '/@/utils/tools'
+import QrcodeVue from 'qrcode.vue'
+import { useLayoutStore } from '/@/store/modules/layout'
 const initPageData = () => {
   return {
     current: 1,
@@ -207,6 +213,9 @@ const initFormData = () => {
   }
 }
 export default defineComponent({
+  components: {
+    QrcodeVue
+  },
   emits:['on-search'],
   setup() {
     const router = useRouter()
@@ -322,6 +331,11 @@ export default defineComponent({
         return item.id
       }).join(','))
     }
+    const getUrl = (row) => {
+      const { getUserInfo,getUserListData } = useLayoutStore()
+      let apiDomain = getUserInfo.sysSetting && getUserInfo.sysSetting.apiDomain
+      return `${apiDomain || window.location.origin }/wx/#/pages/index/index?voteId=${row.infoId}&playerId=${row.id}`
+    }
     onMounted(() => {
       initListData()
     })
@@ -344,7 +358,8 @@ export default defineComponent({
       handleBetchDelete,
       handleSelectionChange,
       selectable,
-      handleAddVisitNum
+      handleAddVisitNum,
+      getUrl
     }
   }
 })
