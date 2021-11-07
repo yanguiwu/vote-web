@@ -1,0 +1,1 @@
+import{_ as e}from"./index.b1bc12a8.js";import{l as r,y as t}from"./element-plus.b05a9d59.js";const c={};function n(s,a){return r(),t("div",null," \u4E3E\u62A5 ")}var _=e(c,[["render",n]]);export{_ as default};

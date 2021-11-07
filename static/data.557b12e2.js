@@ -1,0 +1,1 @@
+import{_ as e}from"./index.b1bc12a8.js";import{l as r,y as a}from"./element-plus.b05a9d59.js";const t={};function c(n,o){return r(),a("div",null," \u6570\u636E\u7EDF\u8BA1... ")}var _=e(t,[["render",c]]);export{_ as default};
