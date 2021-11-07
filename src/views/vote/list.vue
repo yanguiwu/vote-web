@@ -5,7 +5,6 @@
         <span>投票评选列表</span>
         <span>
           <el-button type='success' size='mini' @click='handleCreateClick'>添加活动</el-button>
-          <el-button type='success' size='mini'>数据统计</el-button>
         </span>
       </div>
     </template>
@@ -32,8 +31,8 @@
         </div>
       </el-form-item>
     </el-form>
-    <el-divider class='mt-1 mb-4' />
-    <div class='mb-2'>
+    <el-divider v-if='isAdmin' class='mt-1 mb-4' />
+    <div v-if='isAdmin' class='mb-2'>
       <el-button type='danger' size='mini' @click='handleBetchDelete'>批量删除</el-button>
     </div>
     <el-table :data='listData' border @selection-change='handleSelectionChange'>
@@ -94,7 +93,7 @@
         label='链接'
       >
         <template #default='scope'>
-            <QrcodeVue :value='getUrl(scope.row)' size='60' level='H' />
+          <QrcodeVue :value='getUrl(scope.row)' size='60' level='H' />
         </template>
       </el-table-column>
       <el-table-column
@@ -102,12 +101,10 @@
         label='状态'
       >
         <template #default='scope'>
-          <div v-if='scope.row.status == 1'>
+          <div>
             <div v-if='scope.row.infoStatus == 2' class='color-success'>{{ infoStatusStr(scope.row.infoStatus) }}</div>
             <div v-else class='color-danger'>{{ infoStatusStr(scope.row.infoStatus) }}</div>
           </div>
-          <div v-if='scope.row.status == 3'>已关闭</div>
-          <div v-if='scope.row.status == 0'>未开启</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -155,7 +152,7 @@
               @click='()=> handleChangeStatus(scope.row.id,1)'
             >开启</el-button>
             <el-button
-              v-if='scope.row.status === 1'
+              v-if='scope.row.status === 1 && isAdmin'
               size='mini'
               type='info'
               @click='()=> handleChangeStatus(scope.row.id,3)'
@@ -173,7 +170,7 @@
               @click='()=>handleGoPlayer(scope.row.id, "voteListShow")'
             >查看</el-button>
             <el-button
-              v-if='scope.row.status === 0 || scope.row.status === 3 '
+              v-if='scope.row.status === 0 || isAdmin '
               size='mini'
               type='info'
               @click='()=>handleDelete(scope.row.id)'
@@ -195,6 +192,9 @@ import { ElMessage , ElMessageBox } from 'element-plus'
 import { DateStringConvert, statusStr, infoStatusStr } from '/@/utils/tools'
 import QrcodeVue from 'qrcode.vue'
 import { useLayoutStore } from '/@/store/modules/layout'
+const { getUserInfo } = useLayoutStore()
+const { isAdmin } = getUserInfo
+
 const initPageData = () => {
   return {
     current: 1,
@@ -332,9 +332,8 @@ export default defineComponent({
       }).join(','))
     }
     const getUrl = (row) => {
-      const { getUserInfo,getUserListData } = useLayoutStore()
       let apiDomain = getUserInfo.sysSetting && getUserInfo.sysSetting.apiDomain
-      return `${apiDomain || window.location.origin }/wx/#/pages/index/index?voteId=${row.infoId}&playerId=${row.id}`
+      return `${apiDomain || window.location.origin}/wx/#/pages/index/index?voteId=${row.id}&playerId=${row.id}`
     }
     onMounted(() => {
       initListData()
@@ -359,7 +358,8 @@ export default defineComponent({
       handleSelectionChange,
       selectable,
       handleAddVisitNum,
-      getUrl
+      getUrl,
+      isAdmin
     }
   }
 })

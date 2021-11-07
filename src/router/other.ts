@@ -169,13 +169,18 @@ export const otherRouter:Array<IMenubarList> = [
     path: '/staff',
     component: Components['Layout'],
     redirect: '/staff/list',
-    meta: { title: '用户管理', icon: 'el-icon-s-check' },
+    meta: { title: '用户管理', icon: 'el-icon-s-check', isAdmin: true },
     children: [
       {
         name: 'staffList',
         path: '/staff/list',
         component: () => import('/@/views/staff/list.vue'),
         meta: { title: '用户管理', icon: 'el-icon-s-custom', hiddenBreadcrumb: true }
+      },{
+        name: 'staffCreate',
+        path: '/staff/create',
+        component: () => import('/@/views/staff/create.vue'),
+        meta: { title: '用户管理', icon: 'el-icon-s-custom', hidden: true }
       }
     ]
   },{
@@ -183,7 +188,7 @@ export const otherRouter:Array<IMenubarList> = [
     path: '/setting',
     component: Components['Layout'],
     redirect: '/setting/index',
-    meta: { title: '系统设置', icon: 'el-icon-s-tools' },
+    meta: { title: '系统设置', icon: 'el-icon-s-tools', isAdmin: true },
     children: [
       {
         name: 'settingIndex',
@@ -198,13 +203,19 @@ export const otherRouter:Array<IMenubarList> = [
     path: '/shop-manage',
     component: Components['Layout'],
     redirect: '/shop-manage/index',
-    meta: { title: '开通商户', icon: 'el-icon-s-tools' },
+    meta: { title: '开通商户', icon: 'el-icon-s-tools', isSuperAdmin: true },
     children: [
       {
         name: 'shopManageIndex',
         path: '/shop-manage/index',
         component: () => import('/@/views/shop-manage/index.vue'),
         meta: { title: '开通商户', icon: 'el-icon-s-tools' , hiddenBreadcrumb: true }
+      },
+      {
+        name: 'shopManageCreate',
+        path: '/shop-manage/create',
+        component: () => import('/@/views/shop-manage/create.vue'),
+        meta: { title: '添加商户', icon: 'el-icon-s-tools',hidden: true }
       }
     ]
   }

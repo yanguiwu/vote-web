@@ -15,6 +15,7 @@ const api = {
   voteQueryTaskList: '/vote/task-query-list',
   voteEditTaskStatus: '/vote/edit-task-status',
   voteUpdateView: 'vote/update-view',
+  voteQueryOrderList: 'store/query-order-list'
 }
 
 export function createVote(postData: any):Promise<AxiosResponse<IResponse>> {
@@ -116,6 +117,13 @@ export function voteEditTaskStatus(postData: any):Promise<AxiosResponse<IRespons
 export function voteUpdateView(postData: any):Promise<AxiosResponse<IResponse>> {
   return request({
     url: api.voteUpdateView,
+    method: 'post',
+    data: postData
+  })
+}
+export function voteQueryOrderList(postData: any):Promise<AxiosResponse<IResponse>> {
+  return request({
+    url: api.voteQueryOrderList,
     method: 'post',
     data: postData
   })

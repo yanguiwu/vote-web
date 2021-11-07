@@ -2,7 +2,15 @@
   <el-card>
     <template #header>	
       <div class='justify-between'>
-        <span>投票列表</span>
+        <span>
+          <span v-if='voteData.status == 1 '>
+            <el-button v-if='voteData.infoStatus == 2' size='mini' type='success'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
+            <el-button v-else size='mini' type='warning'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
+          </span>
+          <el-button v-if='voteData.status == 3' size='mini' type='warning'>已关闭</el-button>
+          <el-button v-if='voteData.status == 0' size='mini' type='warning'>未开启</el-button>
+          活动：{{ voteData.title }}
+        </span>
         <span>
           <el-button type='success' size='mini' @click='goBack'>返回</el-button>
         </span>
@@ -68,7 +76,8 @@
 <script lang="ts">
 import { ref,defineComponent, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { voteLogQueryList } from '/@/api/vote/index'
+import { voteLogQueryList, queryVote } from '/@/api/vote/index'
+import { DateStringConvert , playerStatusStr,infoStatusStr } from '/@/utils/tools'
 export default defineComponent({
   emits:['on-search'],
   setup(props:any, context: any) {
@@ -76,6 +85,7 @@ export default defineComponent({
     const route = useRoute()
     let formData = ref({ type: '', subName: '' })
     let listData = ref([])
+    let voteData = ref({})
     let pageData = ref({
       current: 1,
       size: 20,
@@ -136,14 +146,19 @@ export default defineComponent({
       initListDatas()
     }
 
-    onMounted(() => {
+    onMounted(async() => {
       initListDatas()
+      let datas = await queryVote({
+        id: route.params.voteId
+      })
+      voteData.value = datas.data.body
     })
 
     return {
       listData,
       formData,
       pageData,
+      voteData,
       goBack,
       handleAll,
       handleSearch,

@@ -45,39 +45,41 @@
               <el-input-number v-model='formData.maxTicketNum' :min='1' size='small' />
             </el-form-item>
           </div>
-          <div v-else>
-            <el-form-item label='排名范围1（从小到大）' prop='introduce'>
-              <el-input-number v-model='formData.minRankingArr[0]' :min='1' size='small' />
-              到
-              <el-input-number v-model='formData.maxRankingArr[0]' :min='1' size='small' />
-            </el-form-item>
-            <el-form-item label='票数范围1（从小到大）' prop='remark'>
-              <el-input-number v-model='formData.minTicketNumArr[0]' :min='1' size='small' />
-              到
-              <el-input-number v-model='formData.maxTicketNumArr[0]' :min='1' size='small' />
-            </el-form-item>
-            <div class='mb-5' />
-            <el-form-item label='排名范围2（从小到大）' prop='introduce'>
-              <el-input-number v-model='formData.minRankingArr[1]' :min='1' size='small' />
-              到
-              <el-input-number v-model='formData.maxRankingArr[1]' :min='1' size='small' />
-            </el-form-item>
-            <el-form-item label='票数范围2（从小到大）' prop='remark'>
-              <el-input-number v-model='formData.minTicketNumArr[1]' :min='1' size='small' />
-              到
-              <el-input-number v-model='formData.maxTicketNumArr[1]' :min='1' size='small' />
-            </el-form-item>
-            <div class='mb-5' />
-            <el-form-item label='排名范围3（从小到大）' prop='introduce'>
-              <el-input-number v-model='formData.minRankingArr[2]' :min='1' size='small' />
-              到
-              <el-input-number v-model='formData.maxRankingArr[2]' :min='1' size='small' />
-            </el-form-item>
-            <el-form-item label='票数范围3（从小到大）' prop='remark'>
-              <el-input-number v-model='formData.minTicketNumArr[2]' :min='1' size='small' />
-              到
-              <el-input-number v-model='formData.maxTicketNumArr[2]' :min='1' size='small' />
-            </el-form-item>
+          <div v-else >
+            <div v-if="formData.minRankingArr && formData.minRankingArr.length==5">
+              <el-form-item label='排名范围1（从小到大）' prop='introduce'>
+                <el-input-number v-model='formData.minRankingArr[0]' :min='1' size='small' />
+                到
+                <el-input-number v-model='formData.maxRankingArr[0]' :min='1' size='small' />
+              </el-form-item>
+              <el-form-item label='票数范围1（从小到大）' prop='remark'>
+                <el-input-number v-model='formData.minTicketNumArr[0]' :min='1' size='small' />
+                到
+                <el-input-number v-model='formData.maxTicketNumArr[0]' :min='1' size='small' />
+              </el-form-item>
+              <div class='mb-5' />
+              <el-form-item label='排名范围2（从小到大）' prop='introduce'>
+                <el-input-number v-model='formData.minRankingArr[1]' :min='1' size='small' />
+                到
+                <el-input-number v-model='formData.maxRankingArr[1]' :min='1' size='small' />
+              </el-form-item>
+              <el-form-item label='票数范围2（从小到大）' prop='remark'>
+                <el-input-number v-model='formData.minTicketNumArr[1]' :min='1' size='small' />
+                到
+                <el-input-number v-model='formData.maxTicketNumArr[1]' :min='1' size='small' />
+              </el-form-item>
+              <div class='mb-5' />
+              <el-form-item label='排名范围3（从小到大）' prop='introduce'>
+                <el-input-number v-model='formData.minRankingArr[2]' :min='1' size='small' />
+                到
+                <el-input-number v-model='formData.maxRankingArr[2]' :min='1' size='small' />
+              </el-form-item>
+              <el-form-item label='票数范围3（从小到大）' prop='remark'>
+                <el-input-number v-model='formData.minTicketNumArr[2]' :min='1' size='small' />
+                到
+                <el-input-number v-model='formData.maxTicketNumArr[2]' :min='1' size='small' />
+              </el-form-item>
+            </div>
           </div>
        
         <el-form-item>

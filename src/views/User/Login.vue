@@ -18,7 +18,12 @@
         </el-form>
       </div>
     </div>
-        
+    <div class="footer">
+      <div>
+         <a href="https://beian.miit.gov.cn" data-v-503cdbd1="">浙ICP备2021033810号-1</a> 
+         <img src="http://www.beian.gov.cn/img/new/gongan.png" alt="" data-v-503cdbd1="">
+      </div>
+    </div> 
   </div>
 </template>
 
@@ -89,33 +94,47 @@ export default defineComponent({
 <style lang='postcss' scoped>
 
 .layout-body {
-    background: rgb(14 26 84);
+  background: rgb(14 26 84);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .layout-login {
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      .layout-login-right {
+          width: 400px;
+          padding: 0 40px;
+          background: rgba(255,255,255,0.5);
+          display: flex;
+          align-items: center;
+          border-radius: 4px;
+          .layout-login-form {
+              width: 100%;
+              height: 300px;
+              padding-top: 40px;
+              .title {
+                text-align: center;
+                font-size: 25px;
+                color: #333;
+                margin-bottom: 15px;
+              }
+          }
+      }
+  }
+  .footer {
+    position: fixed;
+    bottom: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    .layout-login {
-        margin: 0 auto;
-        display: flex;
-        align-items: center;
-        .layout-login-right {
-            width: 400px;
-						padding: 0 40px;
-            background: rgba(255,255,255,0.5);
-            display: flex;
-            align-items: center;
-            border-radius: 4px;
-            .layout-login-form {
-                width: 100%;
-                height: 300px;
-                padding-top: 40px;
-                .title {
-                  text-align: center;
-                  font-size: 25px;
-                  color: #333;
-                  margin-bottom: 15px;
-                }
-            }
-        }
+    color: #fff;
+    img {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 10px;
+      margin-top: -5px;
     }
+  }
 }
 </style>

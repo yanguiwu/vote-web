@@ -3,7 +3,7 @@
     <template #header>	
       <div class='justify-between'>
         <span>
-          <span v-if='voteData.status == 1'>
+          <span v-if='voteData.status == 1 '>
             <el-button v-if='voteData.infoStatus == 2' size='mini' type='success'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
             <el-button v-else size='mini' type='warning'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
           </span>
@@ -92,12 +92,12 @@
           {{ DateStringConvert(scope.row.createTime) }}
         </template>
       </el-table-column>
-     <el-table-column
+      <el-table-column
         prop='invitationName'
         label='链接'
       >
         <template #default='scope'>
-            <QrcodeVue :value='getUrl(scope.row)' size='60' level='H' />
+          <QrcodeVue :value='getUrl(scope.row)' size='60' level='H' />
         </template>
       </el-table-column>
       <el-table-column
@@ -189,10 +189,10 @@ export default defineComponent({
       size: 20,
       recordCount: 0
     })
-     const getUrl = (row) => {
+    const getUrl = (row) => {
       const { getUserInfo,getUserListData } = useLayoutStore()
       let apiDomain = getUserInfo.sysSetting && getUserInfo.sysSetting.apiDomain
-      return `${apiDomain || window.location.origin }/wx/#/pages/player/index?voteId=${row.id}&playerId=45`
+      return `${apiDomain || window.location.origin}/wx/#/pages/player/index?voteId=${row.id}&playerId=45`
     }
     const handleSearch = (clear?: boolean) => {
       if(clear) {
