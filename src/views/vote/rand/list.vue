@@ -4,8 +4,13 @@
       <div class='justify-between'>
         <span>
           <span v-if='voteData.status == 1'>
-            <el-button v-if='voteData.infoStatus == 2' size='mini' type='success'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
+            <el-button v-if='voteData.infoStatus == 2' size='mini' type='success'>
+              {{ infoStatusStr(voteData.infoStatus) }}
+            </el-button>
             <el-button v-else size='mini' type='warning'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
+            <el-button v-if='voteData.countDown && voteData.countDown > 0 && voteData.infoStatus == 2' size='mini' type='success'> 
+              <Countdown :time='voteData.countDown * 1000' format='DD天HH小时mm分ss秒' />
+            </el-button>
           </span>
           <el-button v-if='voteData.status == 3' size='mini' type='warning'>已关闭</el-button>
           <el-button v-if='voteData.status == 0' size='mini' type='warning'>未开启</el-button>
@@ -81,7 +86,9 @@ import { queryVote } from '/@/api/vote/index'
 import { infoStatusStr ,DateStringConvert } from '/@/utils/tools'
 import { voteQueryTaskList, voteEditTaskStatus } from '/@/api/vote/index'
 import { ElMessageBox ,ElMessage } from 'element-plus'
+import Countdown from 'vue3-countdown'
 export default defineComponent({
+  components:{ Countdown },
   emits:['on-search'],
   setup(props:any, context: any) {
     const router = useRouter()

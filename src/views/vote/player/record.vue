@@ -13,9 +13,9 @@
         <el-input v-model='formData.subName' size='mini' placeholder='输入选手名字' style='width: 146px' class='mr-2' />
         <el-button type='primary' size='mini' class='mr-5' @click='handleSearch'>搜索</el-button>
         <el-button type='danger' size='mini' @click='handleAll'>所有投票</el-button>
-        <el-button type='primary' size='mini' @click='()=>handleChangeType("0")'>普通投票</el-button>
-        <el-button type='primary' size='mini' @click='()=>handleChangeType("1")'>砖石投票</el-button>
-        <el-button type='primary' size='mini' @click='()=>handleChangeType("2")'>虚拟投票</el-button>
+        <el-button type='primary' size='mini' @click='()=>handleChangeType("1")'>普通投票</el-button>
+        <el-button type='primary' size='mini' @click='()=>handleChangeType("2")'>砖石投票</el-button>
+        <el-button type='primary' size='mini' @click='()=>handleChangeType("0")'>虚拟投票</el-button>
       </el-form-item>
     </el-form>
     <el-table :data='listData' border>

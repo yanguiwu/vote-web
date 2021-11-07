@@ -16,15 +16,15 @@
         <el-date-picker v-model='formData.endTime' size='small' type='datetime' style='width: 200px' format='YYYY-MM-DD HH:mm:ss' value-format='YYYYMMDDHHmmss' class='mr-2' />
         <el-button type='primary' size='mini' class='mr-5' @click='handleSearch'>搜索</el-button>
         <el-button type='danger' size='mini' @click='()=>handleChangeFilter()'>全部活动</el-button>
-        <el-button type='primary' size='mini' @click='()=>handleChangeFilter("status", 2)'>进行中</el-button>
-        <el-button type='primary' size='mini' @click='()=>handleChangeFilter("status", 3)'>已结束</el-button>
-        <el-button type='primary' size='mini' @click='()=>handleChangeFilter("status", 1)'>未开始</el-button>
+        <el-button type='primary' size='mini' @click='()=>handleChangeFilter("infoStatus", 2)'>进行中</el-button>
+        <el-button type='primary' size='mini' @click='()=>handleChangeFilter("infoStatus", 3)'>已结束</el-button>
+        <el-button type='primary' size='mini' @click='()=>handleChangeFilter("infoStatus", 1)'>未开始</el-button>
         <div>
           <el-button type='primary' size='mini' @click='()=>handleChangeFilter("todayStatus", 4)'>今日开始</el-button>
           <el-button type='primary' size='mini' @click='()=>handleChangeFilter("todayStatus", 5)'>今日结束</el-button>
-          <el-button type='primary' size='mini'>礼物记录</el-button>
+          <!-- <el-button type='primary' size='mini'>礼物记录</el-button>
           <el-button type='primary' size='mini'>投票记录</el-button>
-          <el-button type='primary' size='mini'>举报记录</el-button>
+          <el-button type='primary' size='mini'>举报记录</el-button> -->
           <!-- <el-button type='primary' size='mini'>2021-10-10</el-button>
           <el-button type='primary' size='mini'>2021-10-11</el-button>
           <el-button type='primary' size='mini'>2021-10-12</el-button> -->
@@ -36,7 +36,7 @@
       <el-button type='danger' size='mini' @click='handleBetchDelete'>批量删除</el-button>
     </div>
     <el-table :data='listData' border @selection-change='handleSelectionChange'>
-      <el-table-column type='selection' width='55' :selectable='selectable' />
+      <el-table-column v-if='isAdmin' type='selection' width='55' :selectable='selectable' />
       <el-table-column
         prop='fileWebPath'
         label='图片'
@@ -50,28 +50,33 @@
         prop='title'
         label='活动名称'
       />
-      <el-table-column label='投票时间' width='90px'>
+      <el-table-column label='投票时间' width='160px'>
         <template #default='scope'>
           {{ DateStringConvert(scope.row.startVoteTime) }}
           <br>
           {{ DateStringConvert(scope.row.endVoteTime) }}
           <br>
-          {{ scope.row.countDown }}
+          <el-button v-if='scope.row.countDown && scope.row.countDown > 0 && scope.row.infoStatus == 2' size='mini' type='success'> 
+            <Countdown :time='scope.row.countDown* 1000' format='DD天HH小时mm分ss秒' />
+          </el-button>
         </template>
       </el-table-column>
       <el-table-column
         label='选手数量'
+        prop='subNum'
+        width='60px'
       />
+      <el-table-column label='投票量' min-width='120px'>
+        <template #default='scope'>
+          <span class='color-danger'>{{ scope.row.ticketNum }}</span> / {{ scope.row.voteNum }}
+        </template>
+      </el-table-column>
       <el-table-column
-        prop='invitationTime'
-        label='投票量'
-      />
-      <el-table-column
-        prop='invitationName'
+        prop='payAmount'
         label='礼物'
+        width='60px'
       />
       <el-table-column
-        prop='invitationName'
         label='浏览量'
         width='120px'
       >
@@ -91,13 +96,15 @@
       <el-table-column
         prop='invitationName'
         label='链接'
+        width='70px'
       >
         <template #default='scope'>
-          <QrcodeVue :value='getUrl(scope.row)' size='60' level='H' />
+          <QrcodeVue :value='getUrl(scope.row)' size='50' level='H' />
         </template>
       </el-table-column>
       <el-table-column
         prop='infoStatus'
+        width='60px'
         label='状态'
       >
         <template #default='scope'>
@@ -110,19 +117,20 @@
       <el-table-column
         prop='remark'
         label='备注'
+        width='60px'
       />
-      <el-table-column label='操作' width='320px'>
+      <el-table-column label='操作' width='270px'>
         <template #default='scope'>
           <el-button
             size='mini'
             type='info'
             @click='()=>handleGoPlayer(scope.row.id, "voteListPlayer")'
           >选管</el-button>
-          <el-button
+          <!-- <el-button
             size='mini'
             type='info'
             @click='()=>handleGoPlayer(scope.row.id, "voteListComplain")'
-          >举报</el-button>
+          >举报</el-button> -->
           <el-button
             size='mini'
             type='info'
@@ -192,6 +200,7 @@ import { ElMessage , ElMessageBox } from 'element-plus'
 import { DateStringConvert, statusStr, infoStatusStr } from '/@/utils/tools'
 import QrcodeVue from 'qrcode.vue'
 import { useLayoutStore } from '/@/store/modules/layout'
+import Countdown from 'vue3-countdown'
 const { getUserInfo } = useLayoutStore()
 const { isAdmin } = getUserInfo
 
@@ -214,7 +223,8 @@ const initFormData = () => {
 }
 export default defineComponent({
   components: {
-    QrcodeVue
+    QrcodeVue,
+    Countdown
   },
   emits:['on-search'],
   setup() {

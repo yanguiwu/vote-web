@@ -4,8 +4,13 @@
       <div class='justify-between'>
         <span>
           <span v-if='voteData.status == 1 '>
-            <el-button v-if='voteData.infoStatus == 2' size='mini' type='success'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
+            <el-button v-if='voteData.infoStatus == 2' size='mini' type='success'>
+              {{ infoStatusStr(voteData.infoStatus) }}
+            </el-button>
             <el-button v-else size='mini' type='warning'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
+            <el-button v-if='voteData.countDown && voteData.countDown > 0 && voteData.infoStatus == 2' size='mini' type='success'> 
+              <Countdown :time='voteData.countDown * 1000' format='DD天HH小时mm分ss秒' />
+            </el-button>
           </span>
           <el-button v-if='voteData.status == 3' size='mini' type='warning'>已关闭</el-button>
           <el-button v-if='voteData.status == 0' size='mini' type='warning'>未开启</el-button>
@@ -21,9 +26,9 @@
         <el-input v-model='formData.subName' size='mini' placeholder='输入选手名字' style='width: 146px' class='mr-2' />
         <el-button type='primary' size='mini' class='mr-5' @click='handleSearch'>搜索</el-button>
         <el-button type='danger' size='mini' @click='handleAll'>所有投票</el-button>
-        <el-button type='primary' size='mini' @click='()=>handleChangeType("0")'>普通投票</el-button>
-        <el-button type='primary' size='mini' @click='()=>handleChangeType("1")'>砖石投票</el-button>
-        <el-button type='primary' size='mini' @click='()=>handleChangeType("2")'>虚拟投票</el-button>
+        <el-button type='primary' size='mini' @click='()=>handleChangeType("1")'>普通投票</el-button>
+        <el-button type='primary' size='mini' @click='()=>handleChangeType("2")'>砖石投票</el-button>
+        <el-button type='primary' size='mini' @click='()=>handleChangeType("0")'>虚拟投票</el-button>
       </el-form-item>
     </el-form>
     <el-table :data='listData' border>
@@ -78,7 +83,9 @@ import { ref,defineComponent, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { voteLogQueryList, queryVote } from '/@/api/vote/index'
 import { DateStringConvert , playerStatusStr,infoStatusStr } from '/@/utils/tools'
+import Countdown from 'vue3-countdown'
 export default defineComponent({
+  components: { Countdown },
   emits:['on-search'],
   setup(props:any, context: any) {
     const router = useRouter()
@@ -163,7 +170,8 @@ export default defineComponent({
       handleAll,
       handleSearch,
       pCurrentChange,
-      handleChangeType
+      handleChangeType,
+      infoStatusStr
     }
   }
 })

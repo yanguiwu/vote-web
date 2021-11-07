@@ -4,8 +4,13 @@
       <div class='justify-between'>
         <span>
           <span v-if='voteData.status == 1 '>
-            <el-button v-if='voteData.infoStatus == 2' size='mini' type='success'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
+            <el-button v-if='voteData.infoStatus == 2' size='mini' type='success'>
+              {{ infoStatusStr(voteData.infoStatus) }}
+            </el-button>
             <el-button v-else size='mini' type='warning'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
+            <el-button v-if='voteData.countDown && voteData.countDown > 0 && voteData.infoStatus == 2' size='mini' type='success'> 
+              <Countdown :time='voteData.countDown * 1000' format='DD天HH小时mm分ss秒' />
+            </el-button>
           </span>
           <el-button v-if='voteData.status == 3' size='mini' type='warning'>已关闭</el-button>
           <el-button v-if='voteData.status == 0' size='mini' type='warning'>未开启</el-button>
@@ -25,14 +30,14 @@
         <!-- <el-button type='primary' size='mini'>数据导出</el-button> -->
       </el-form-item>
     </el-form>
-    <el-divider class='mt-1 mb-4' />
-    <div class='mb-2'>
+    <el-divider v-if='isAdmin' class='mt-1 mb-4' />
+    <div v-if='isAdmin' class='mb-2'>
       <el-button type='danger' size='mini' @click='handleBetchDelete'>批量删除</el-button>
       <el-button type='danger' size='mini' @click='handleChangeTicket(1,10)'>一键随机修改票数（1-10）</el-button>
       <el-button type='danger' size='mini' @click='handleChangeTicket(10,30)'>一键随机修改票数（10-30）</el-button>
     </div>
     <el-table :data='listData' border @selection-change='handleSelectionChange'>
-      <el-table-column type='selection' width='55' />
+      <el-table-column v-if='isAdmin' type='selection' width='55' />
       <el-table-column
         width='60px'
         prop='infoSeq'
@@ -76,7 +81,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop='invitationTime'
+        prop='payAmount'
         label='礼物'
       />
       <el-table-column
@@ -171,15 +176,19 @@ import { DateStringConvert , playerStatusStr,infoStatusStr } from '/@/utils/tool
 import { ElMessage, ElMessageBox } from 'element-plus'
 import QrcodeVue from 'qrcode.vue'
 import { useLayoutStore } from '/@/store/modules/layout'
+import Countdown from 'vue3-countdown'
 
 export default defineComponent({
   components:{
-    QrcodeVue
+    QrcodeVue,
+    Countdown
   },
   emits:['on-search'],
-  setup(props:any, context: any) {
+  setup() {
     const router = useRouter()
     const route = useRoute()
+    const { getUserInfo } = useLayoutStore()
+    const { isAdmin } = getUserInfo
     let formData = ref({ name:'',id: '' })
     let listData = ref([])
     let multipleSelection = ref([])
@@ -190,7 +199,7 @@ export default defineComponent({
       recordCount: 0
     })
     const getUrl = (row) => {
-      const { getUserInfo,getUserListData } = useLayoutStore()
+      
       let apiDomain = getUserInfo.sysSetting && getUserInfo.sysSetting.apiDomain
       return `${apiDomain || window.location.origin}/wx/#/pages/player/index?voteId=${row.id}&playerId=45`
     }
@@ -366,7 +375,8 @@ export default defineComponent({
       handleBetchClick,
       infoStatusStr,
       handleAddInitialTicketNum,
-      getUrl
+      getUrl,
+      isAdmin
     }
   }
 })

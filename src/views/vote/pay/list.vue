@@ -6,6 +6,9 @@
           <span v-if='voteData.status == 1 '>
             <el-button v-if='voteData.infoStatus == 2' size='mini' type='success'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
             <el-button v-else size='mini' type='warning'>{{ infoStatusStr(voteData.infoStatus) }}</el-button>
+            <el-button v-if='voteData.countDown && voteData.countDown > 0 && voteData.infoStatus == 2' size='mini' type='success'> 
+              <Countdown :time='voteData.countDown * 1000' format='DD天HH小时mm分ss秒' />
+            </el-button>
           </span>
           <el-button v-if='voteData.status == 3' size='mini' type='warning'>已关闭</el-button>
           <el-button v-if='voteData.status == 0' size='mini' type='warning'>未开启</el-button>
@@ -36,6 +39,16 @@
         prop='subName'
         label='选手名称'
       />
+      <el-table-column label='开始日期' width='160px'>
+        <template #default='scope'>
+          {{ DateStringConvert(scope.row.createTime) }}
+        </template>
+      </el-table-column>
+      <el-table-column label='支付日期' width='160px'>
+        <template #default='scope'>
+          {{ DateStringConvert(scope.row.payTime) }}
+        </template>
+      </el-table-column>
       <el-table-column
         prop='voteNum'
         label='票数'
@@ -46,7 +59,7 @@
       </el-table-column>
       <el-table-column
         prop='voteNum'
-        label='砖石数'
+        label='支付金额'
       >
         <template #default='scope'>
           ￥{{ scope.row.payAmount }}
@@ -70,7 +83,9 @@ import { ref,defineComponent, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { voteQueryOrderList, queryVote } from '/@/api/vote/index'
 import { DateStringConvert , playerStatusStr,infoStatusStr } from '/@/utils/tools'
+import Countdown from 'vue3-countdown'
 export default defineComponent({
+  components:{ Countdown },
   emits:['on-search'],
   setup() {
     const router = useRouter()
@@ -155,7 +170,8 @@ export default defineComponent({
       goBack,
       handleSearch,
       pCurrentChange,
-      infoStatusStr
+      infoStatusStr,
+      DateStringConvert
     }
   }
 })

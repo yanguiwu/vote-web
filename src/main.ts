@@ -14,6 +14,7 @@ import '/@/assets/css/index.css'
 import 'virtual:svg-icons-register'
 import DrawerHeader from '/@/components/DrawerHeader.vue'
 import FadeInput from './components/FadeInput.vue' 
+import countDown from './components/countDown.vue' 
 
 const app = createApp(App)
 direct(app)
@@ -22,4 +23,5 @@ app.use(router)
 app.use(pinia)
 app.component('DrawerHeader', DrawerHeader)
 app.component('FadeInput', FadeInput)
+app.component('CountDown', countDown)
 app.mount('#app')
