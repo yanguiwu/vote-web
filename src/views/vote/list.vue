@@ -202,7 +202,7 @@ import QrcodeVue from 'qrcode.vue'
 import { useLayoutStore } from '/@/store/modules/layout'
 import Countdown from 'vue3-countdown'
 const { getUserInfo } = useLayoutStore()
-const { isAdmin } = getUserInfo
+const isAdmin = getUserInfo.type == 'isAdmin'
 
 const initPageData = () => {
   return {

@@ -3,10 +3,10 @@
     <template #header>	
       <div class='justify-between'>
         <span>
-          商户管理
+          用户管理
         </span>
         <span>
-          <el-button type='success' size='mini' @click='handleCreateClick'>添加商户</el-button>
+          <el-button type='success' size='mini' @click='handleCreateClick'>添加用户</el-button>
         </span>
       </div>
     </template>

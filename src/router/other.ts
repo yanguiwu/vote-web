@@ -32,7 +32,7 @@ export const otherRouter:Array<IMenubarList> = [
           name: 'voteListIndex',
           path: '/vote/list/index',
           component: () => import('/@/views/vote/list.vue'),
-          meta: { title: '投票评选', icon: 'el-icon-s-finance', hidden: true, hiddenBreadcrumb: true }
+          meta: { title: '投票评选', icon: 'el-icon-s-finance', hidden: true, hiddenBreadcrumb: true , activeMenu: '/vote/list' }
         },{
           name: 'voteListCreate',
           path: '/vote/list/create',
@@ -210,6 +210,7 @@ export const otherRouter:Array<IMenubarList> = [
         path: '/shop-manage/index',
         component: () => import('/@/views/shop-manage/index.vue'),
         meta: { title: '开通商户', icon: 'el-icon-s-tools' , hiddenBreadcrumb: true }
+      
       },
       {
         name: 'shopManageCreate',

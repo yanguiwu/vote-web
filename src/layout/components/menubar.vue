@@ -14,7 +14,7 @@
       @select='onOpenChange'
     >
       <menubar-item v-for='v in filterMenubarData' :key='v.path' :index='v.path' :menu-list='v' />
-      </el-menu>
+    </el-menu>
   </el-scrollbar>
 </template>
 
@@ -29,7 +29,18 @@ import { useLayoutStore } from '/@/store/modules/layout'
 const filterMenubar = (menuList:IMenubarList[]) => {
   const f = (menuList:IMenubarList[]) => {
     let arr:IMenubarList[] = []
+    const { getUserInfo } = useLayoutStore()
+    let userType = getUserInfo.type
     menuList.filter(v => !v.meta.hidden).forEach(v => {
+      if(userType === 'isSuperAdmin' && !v.meta.isSuperAdmin) {
+        return
+      }
+      if(userType === 'isAdmin' && v.meta.isSuperAdmin) {
+        return
+      }
+      if(!userType && (v.meta.isSuperAdmin || v.meta.isAdmin)) {
+        return
+      }
       let child = v.children && v.children.filter(v => !v.meta.hidden)
       let currentItem = v
       if(!v.meta.alwaysShow && child && child.length === 1) {

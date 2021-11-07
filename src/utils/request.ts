@@ -47,7 +47,7 @@ request.interceptors.request.use(config => {
 // response interceptor
 request.interceptors.response.use((response:AxiosResponse<IResponse>) => {
   const { data } = response
-  console.log(response)
+  console.log('response',response)
   const { getStatus, logout } = useLayoutStore()
   loading.close()
   if(data.code !== 0) {

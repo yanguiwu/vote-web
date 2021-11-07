@@ -199,7 +199,12 @@ export const useLayoutStore = defineStore({
       setLocal('token', this.status, 1000 * 60 * 60)
       setLocal('user', this.userInfo)
       const { query } = router.currentRoute.value
-      router.push(typeof query.from === 'string' ? decode(query.from) : '/vote')
+      if(this.userInfo.type == 'isSuperAdmin') {
+        router.push('/shop-manage')
+      }else {
+        // router.push(typeof query.from === 'string' ? decode(query.from) : '/vote')
+        router.push('/vote')
+      }
     },
     async GenerateRoutes():Promise<void> {
       this.menubar.menuList = otherRouter

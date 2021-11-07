@@ -60,7 +60,7 @@
         prop='phone'
         label='手机号'
       />
-      <el-table-column label='票数' min-width='120px'>
+      <el-table-column v-if='isAdmin' label='票数' min-width='120px'>
         <template #default='scope'>
           <span class='color-danger'>{{ scope.row.ticketNum }}</span> / {{ scope.row.orderTicketNum + scope.row.ticketNum + scope.row.initialTicketNum }}
           <br>
@@ -73,7 +73,7 @@
           <el-tooltip
             class='item'
             effect='dark'
-            content='加票输入正数，减票输入负数'
+            content='加输入正数，减输入负数'
             placement='top'
           >
             <el-button icon='el-icon-plus' size='mini' @click='() => handleAddInitialTicketNum(scope.row)' />
@@ -134,6 +134,7 @@
             size='mini'
             type='info'
             class='mb-2'
+            @click='()=>handleCopy(scope.row.id)'
           >复制选手链接</el-button>
           <el-button
             size='mini'
@@ -188,7 +189,7 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const { getUserInfo } = useLayoutStore()
-    const { isAdmin } = getUserInfo
+    const isAdmin = getUserInfo.type == 'isAdmin'
     let formData = ref({ name:'',id: '' })
     let listData = ref([])
     let multipleSelection = ref([])
@@ -198,8 +199,25 @@ export default defineComponent({
       size: 20,
       recordCount: 0
     })
+    const handleCopy = (id) => {
+      copy(id)
+    }
+    const copy = (id) => {
+      let transfer = document.createElement('input')
+      document.body.appendChild(transfer)
+      let apiDomain = getUserInfo.sysSetting && getUserInfo.sysSetting.apiDomain
+      transfer.value = `${apiDomain || window.location.origin}/wx/#/pages/player/index?voteId=${id}&playerId=45` // 这里表示想要复制的内容
+      transfer.focus()
+      transfer.select()
+      if (document.execCommand('copy')) {
+        document.execCommand('copy')
+      }
+      transfer.blur()
+      console.log('复制成功')
+      ElMessage.success('复制成功')
+      document.body.removeChild(transfer)
+    }
     const getUrl = (row) => {
-      
       let apiDomain = getUserInfo.sysSetting && getUserInfo.sysSetting.apiDomain
       return `${apiDomain || window.location.origin}/wx/#/pages/player/index?voteId=${row.id}&playerId=45`
     }
@@ -376,7 +394,8 @@ export default defineComponent({
       infoStatusStr,
       handleAddInitialTicketNum,
       getUrl,
-      isAdmin
+      isAdmin,
+      handleCopy
     }
   }
 })
