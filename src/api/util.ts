@@ -5,7 +5,7 @@ import { IApiRegionCodeItem, IApiRegionCodeTreeItem ,ISysMenusItem } from '/@/ty
 const api = {
   getSysRegionCode: '/api/util/sysRegionCode',
   sysMenu: '/api/util/queryMenu',
-  imageDelete : 'http://api.yanguiwu.com/vote-api/sys-file/img-delete'
+  imageDelete : '/sys-file/img-delete'
 }
 
 function buildSysRegionCodeTree(data:IApiRegionCodeItem[]) {

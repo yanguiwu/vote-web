@@ -62,3 +62,6 @@ input::-webkit-inner-spin-button {
 	color: #999;
 	font-size: 12px;
 }
+.text-left {
+	text-align: left;
+}

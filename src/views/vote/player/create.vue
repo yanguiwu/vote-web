@@ -118,8 +118,8 @@ export default defineComponent({
       ]
     }
     const beforeAvatarUpload = (file) => {
-      if (file.size > 300 * 1024) {
-        ElMessage.error('上传头像图片大小不能超过 300kb!')
+      if (file.size > 500 * 1024) {
+        ElMessage.error('上传头像图片大小不能超过 500kb!')
         return false
       }
       return true

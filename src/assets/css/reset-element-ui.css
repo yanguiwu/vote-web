@@ -64,7 +64,9 @@
 	border-right: 1px solid #dcdfe6 !important;;
 	border-bottom: 1px solid #dcdfe6 !important;;
 }
-
+.el-table td, .el-table th {
+	text-align: center !important;;
+}
 .el-step__icon {
   border: 1px solid #999!important;
 }

@@ -59,8 +59,9 @@
       <el-table-column
         prop='phone'
         label='手机号'
+        width='90px'
       />
-      <el-table-column v-if='isAdmin' label='票数' min-width='120px'>
+      <el-table-column v-if='isAdmin' label='票数' width='120px'>
         <template #default='scope'>
           <span class='color-danger'>{{ scope.row.ticketNum }}</span> / {{ scope.row.orderTicketNum + scope.row.ticketNum + scope.row.initialTicketNum }}
           <br>
@@ -80,13 +81,15 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column
-        prop='payAmount'
-        label='礼物'
-      />
+      <el-table-column label='礼物' width='60px'>
+        <template #default='scope'>
+          <div class='color-danger text-center'>{{ scope.row.payAmount }}</div> 
+        </template>
+      </el-table-column>
       <el-table-column
         prop='viewNum'
         label='浏览次数'
+        width='80px'
       />
       <el-table-column
         width='90px'
@@ -130,35 +133,37 @@
       </el-table-column>
       <el-table-column label='操作' width='230px'>
         <template #default='scope'>
-          <el-button
-            size='mini'
-            type='info'
-            class='mb-2'
-            @click='()=>handleCopy(scope.row.id)'
-          >复制选手链接</el-button>
-          <el-button
-            size='mini'
-            type='info'
-            class='mb-2'
-            @click='()=>handleGoPlayer(scope.row.id)'
-          >数据记录</el-button>
-          <div>
-            <el-button
-              size='mini'
-              :type='scope.row.todayStar ? "danger": "info"'
-              @click='()=>handleStart(scope.row.id,scope.row.todayStar)'
-            >
-              {{ scope.row.todayStar ? '今日之星' : '设为今日之星' }}</el-button>
+          <div class='text-left'>
             <el-button
               size='mini'
               type='info'
-              @click='()=>handleEdit(scope.row.id)'
-            >修改</el-button>
+              class='mb-2'
+              @click='()=>handleCopy(scope.row)'
+            >复制选手链接</el-button>
             <el-button
               size='mini'
               type='info'
-              @click='()=>handleChangeStatus(scope.row.id, 2)'
-            >删除</el-button>
+              class='mb-2'
+              @click='()=>handleGoPlayer(scope.row.id)'
+            >数据记录</el-button>
+            <div>
+              <el-button
+                size='mini'
+                :type='scope.row.todayStar ? "danger": "info"'
+                @click='()=>handleStart(scope.row.id,scope.row.todayStar)'
+              >
+                {{ scope.row.todayStar ? '今日之星' : '设为今日之星' }}</el-button>
+              <el-button
+                size='mini'
+                type='info'
+                @click='()=>handleEdit(scope.row.id)'
+              >修改</el-button>
+              <el-button
+                size='mini'
+                type='info'
+                @click='()=>handleChangeStatus(scope.row.id, 2)'
+              >删除</el-button>
+            </div>
           </div>
         </template>
       </el-table-column>
@@ -199,14 +204,14 @@ export default defineComponent({
       size: 20,
       recordCount: 0
     })
-    const handleCopy = (id) => {
-      copy(id)
+    const handleCopy = (row:any) => {
+      copy(row)
     }
-    const copy = (id) => {
+    const copy = (row) => {
       let transfer = document.createElement('input')
       document.body.appendChild(transfer)
       let apiDomain = getUserInfo.sysSetting && getUserInfo.sysSetting.apiDomain
-      transfer.value = `${apiDomain || window.location.origin}/wx/#/pages/player/index?voteId=${id}&playerId=45` // 这里表示想要复制的内容
+      transfer.value = `${apiDomain || window.location.origin}/wx/#/pages/player/index?voteId=${row.infoId}&playerId=${row.id}` // 这里表示想要复制的内容
       transfer.focus()
       transfer.select()
       if (document.execCommand('copy')) {
@@ -219,7 +224,7 @@ export default defineComponent({
     }
     const getUrl = (row) => {
       let apiDomain = getUserInfo.sysSetting && getUserInfo.sysSetting.apiDomain
-      return `${apiDomain || window.location.origin}/wx/#/pages/player/index?voteId=${row.id}&playerId=45`
+      return `${apiDomain || window.location.origin}/wx/#/pages/player/index?voteId=${row.infoId}&playerId=${row.id}`
     }
     const handleSearch = (clear?: boolean) => {
       if(clear) {

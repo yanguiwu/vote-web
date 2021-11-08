@@ -50,7 +50,7 @@
         prop='title'
         label='活动名称'
       />
-      <el-table-column label='投票时间' width='160px'>
+      <el-table-column label='投票时间' width='150px'>
         <template #default='scope'>
           {{ DateStringConvert(scope.row.startVoteTime) }}
           <br>
@@ -66,22 +66,22 @@
         prop='subNum'
         width='60px'
       />
-      <el-table-column label='投票量' min-width='120px'>
+      <el-table-column label='投票量' min-width='100px' class='text-center'>
         <template #default='scope'>
           <span class='color-danger'>{{ scope.row.ticketNum }}</span> / {{ scope.row.voteNum }}
         </template>
       </el-table-column>
-      <el-table-column
-        prop='payAmount'
-        label='礼物'
-        width='60px'
-      />
+      <el-table-column label='礼物' min-width='120px' width='60px'>
+        <template #default='scope'>
+          <div class='color-danger text-center'>{{ scope.row.payAmount }}</div> 
+        </template>
+      </el-table-column>
       <el-table-column
         label='浏览量'
         width='120px'
       >
         <template #default='scope'>
-          {{ scope.row.visitNum + scope.row.initialNum }}
+          <div class='text-left'> {{ scope.row.visitNum + scope.row.initialNum }}</div>
           <div class='justify-between'>
             <el-input
               v-model='listData[scope.$index].addInitialNum'
@@ -121,68 +121,70 @@
       />
       <el-table-column label='操作' width='270px'>
         <template #default='scope'>
-          <el-button
-            size='mini'
-            type='info'
-            @click='()=>handleGoPlayer(scope.row.id, "voteListPlayer")'
-          >选管</el-button>
-          <!-- <el-button
+          <div class='text-left'>
+            <el-button
+              size='mini'
+              type='info'
+              @click='()=>handleGoPlayer(scope.row.id, "voteListPlayer")'
+            >选管</el-button>
+            <!-- <el-button
             size='mini'
             type='info'
             @click='()=>handleGoPlayer(scope.row.id, "voteListComplain")'
           >举报</el-button> -->
-          <el-button
-            size='mini'
-            type='info'
-            @click='()=>handleGoPlayer(scope.row.id, "voteListPay")'
-          >礼物</el-button>
-          <el-button
-            size='mini'
-            type='info'
-            @click='()=>handleGoPlayer(scope.row.id, "voteListRecord")'
-          >投票</el-button>
-          <el-button
-            size='mini'
-            type='info'
-            @click='()=>handleCopyVote(scope.row.id)'
-          >复制添加</el-button>
-          <div class='mt-2'>
             <el-button
               size='mini'
               type='info'
-              @click='()=>handleGoPlayer(scope.row.id, "voteListRand")'
-            >添加随机投票</el-button>
-            <!-- status  0未发布 1已发布 2已删除 3已关闭 -->
+              @click='()=>handleGoPlayer(scope.row.id, "voteListPay")'
+            >礼物</el-button>
             <el-button
-              v-if='scope.row.status === 0'
               size='mini'
               type='info'
-              @click='()=> handleChangeStatus(scope.row.id,1)'
-            >开启</el-button>
+              @click='()=>handleGoPlayer(scope.row.id, "voteListRecord")'
+            >投票</el-button>
             <el-button
-              v-if='scope.row.status === 1 && isAdmin'
               size='mini'
               type='info'
-              @click='()=> handleChangeStatus(scope.row.id,3)'
-            >关闭</el-button>
-            <el-button
-              v-if='scope.row.status === 0'
-              size='mini'
-              type='info'
-              @click='()=>handleGoPlayer(scope.row.id, "voteListEdit")'
-            >编辑</el-button>
-            <el-button
-              v-if='scope.row.status != 0'
-              size='mini'
-              type='info'
-              @click='()=>handleGoPlayer(scope.row.id, "voteListShow")'
-            >查看</el-button>
-            <el-button
-              v-if='scope.row.status === 0 || isAdmin '
-              size='mini'
-              type='info'
-              @click='()=>handleDelete(scope.row.id)'
-            >删除</el-button>
+              @click='()=>handleCopyVote(scope.row.id)'
+            >复制添加</el-button>
+            <div class='mt-2'>
+              <el-button
+                size='mini'
+                type='info'
+                @click='()=>handleGoPlayer(scope.row.id, "voteListRand")'
+              >添加随机投票</el-button>
+              <!-- status  0未发布 1已发布 2已删除 3已关闭 -->
+              <el-button
+                v-if='scope.row.status === 0'
+                size='mini'
+                type='info'
+                @click='()=> handleChangeStatus(scope.row.id,1)'
+              >开启</el-button>
+              <el-button
+                v-if='scope.row.status === 1 && isAdmin'
+                size='mini'
+                type='info'
+                @click='()=> handleChangeStatus(scope.row.id,3)'
+              >关闭</el-button>
+              <el-button
+                v-if='scope.row.status === 0'
+                size='mini'
+                type='info'
+                @click='()=>handleGoPlayer(scope.row.id, "voteListEdit")'
+              >编辑</el-button>
+              <el-button
+                v-if='scope.row.status != 0'
+                size='mini'
+                type='info'
+                @click='()=>handleGoPlayer(scope.row.id, "voteListShow")'
+              >查看</el-button>
+              <el-button
+                v-if='scope.row.status === 0 || isAdmin '
+                size='mini'
+                type='info'
+                @click='()=>handleDelete(scope.row.id)'
+              >删除</el-button>
+            </div>
           </div>
         </template>
       </el-table-column>

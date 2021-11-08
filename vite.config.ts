@@ -37,6 +37,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       port: env.VITE_PORT
     },
     build: {
+      outDir: 'web',
       assetsDir: 'static',
       sourcemap: false,
       manifest: false,
