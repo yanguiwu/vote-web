@@ -27,13 +27,16 @@ const errorHandler = (error:{message:string}) => {
 
 // request interceptor
 request.interceptors.request.use(config => {
+  console.log(config)
   const { getStatus } = useLayoutStore()
-  loading = ElLoading.service({
-    lock: true,
-    text: 'Loading',
-    spinner: 'el-icon-loading',
-    background: 'rgba(0, 0, 0, 0.4)'
-  })
+  if(config.url != 'store/query-order-list') {
+    loading = ElLoading.service({
+      lock: true,
+      text: 'Loading',
+      spinner: 'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.4)'
+    })
+  }
   console.log('getStatus.ACCESS_TOKEN',getStatus.ACCESS_TOKEN)
   const token = getStatus.ACCESS_TOKEN
   // 如果 token 存在

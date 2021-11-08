@@ -16,6 +16,18 @@
       <div class='layout-sidebar-menubar flex flex-1 overflow-hidden'>
         <layout-menubar />
       </div>
+      <div class='left-bottom-fixed'>
+        <div v-for='order in orderList' :key='order.id'>
+          {{ order.subName }}充值了
+          <span class='num'>{{ order.payAmount }}</span> 
+          <span v-if='order.payStatus === 1 ' class='color-danger'>
+            未支付
+          </span>
+          <span v-else class='color-success'>
+            已支付
+          </span>
+        </div>
+      </div>
     </div>
     <div class='layout-main flex flex-1 flex-col overflow-x-hidden overflow-y-auto'>
       <div class='layout-main-navbar flex justify-between items-center h-12 shadow-sm overflow-hidden relative z-10'>
@@ -32,14 +44,14 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, onMounted } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import LayoutContent from '/@/layout/components/content.vue'
 import LayoutMenubar from '/@/layout/components/menubar.vue'
 import LayoutNavbar from '/@/layout/components/navbar.vue'
 import LayoutSideSetting from '/@/layout/components/sideSetting.vue'
 import { throttle } from '/@/utils/tools'
 import { useLayoutStore } from '/@/store/modules/layout'
-
+import { voteQueryOrderList } from '/@/api/vote/index'
 
 export default defineComponent ({
   name: 'Layout',
@@ -51,10 +63,18 @@ export default defineComponent ({
   },
   setup() {
     const { changeTheme, changeDeviceWidth, changeCollapsed, getMenubar } = useLayoutStore()
-
+    const orderList = ref([])
+    let time:any = null
     changeTheme()
-
+   
     onMounted(async() => {
+      initOrderList()
+      if(time) {
+        clearInterval(time)
+      }
+      setInterval(() => {
+        initOrderList()
+      },3000)
       changeDeviceWidth()
       const throttleFn = throttle(300)
       let throttleF = async function() {
@@ -64,16 +84,39 @@ export default defineComponent ({
       window.addEventListener('resize', throttleF, true)
     })
 
+    const initOrderList = async() => {
+      let datas = await voteQueryOrderList({})
+      let { data } = datas.data.body
+      orderList.value = data
+    }
     return {
       getMenubar,
-      changeCollapsed
+      changeCollapsed,
+      orderList
     }
   }
 })
 </script>
 
 <style lang='postcss' scoped>
-    ::v-deep(.layout-sidebar-sidesetting .el-drawer__header) {
-        margin-bottom: 0;
+  ::v-deep(.layout-sidebar-sidesetting .el-drawer__header) {
+      margin-bottom: 0;
+  }
+  .left-bottom-fixed {
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    line-height: 25px;
+    z-index: 1000;
+    background-color: rgba(255,255,255,0.9);
+    padding: 10px;
+    .num {
+      min-width: 30px;
+      display: inline-block;
+      font-weight: bold;
+      color: orange;
+      font-size: 18px;
     }
+  }
+
 </style>

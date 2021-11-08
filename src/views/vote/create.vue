@@ -16,15 +16,15 @@
         <el-form-item label='滚动文字'>
           <el-input v-model='formData.rollTitle' size='small' placeholder='滚动文字' style='width: 50%;' />
         </el-form-item>
-        <el-form-item label='每人可投票总数:'>
-          <el-input v-model='formData.userVoteDayNum' type='number' size='small' placeholder='每人可投票总数' style='width: 50%;' />
+        <el-form-item label='每人每天可投票数:'>
+          <el-input v-model='formData.userVoteDayNum' type='number' size='small' placeholder='每人每天可投票数' style='width: 50%;' />
         </el-form-item>
-        <el-form-item label='每天每人可投票次数:'>
+        <!-- <el-form-item label='每天每人可投票次数:'>
           <el-input v-model='formData.userVoteSingleNum' type='number' size='small' placeholder='每天每人可投票次数' style='width: 50%;' />
         </el-form-item>
         <el-form-item label='每天可投票总数:'>
           <el-input v-model='formData.maxVoteNum' type='number' size='small' placeholder='每天可投票总数' style='width: 50%;' />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label='访问量:' type='number'>
           <el-input v-model='formData.initialNum' type='number' size='small' placeholder='访问量' style='width: 50%;' />
         </el-form-item>

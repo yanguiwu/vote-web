@@ -16,7 +16,7 @@ export const useLayoutStore = defineStore({
   id: 'layout',
   state: ():ILayout => ({
     menubar: {
-      status: document.body.offsetWidth < 768 ? IMenubarStatus.PHN : IMenubarStatus.PCE,
+      status: document.body.offsetWidth < 768 ? IMenubarStatus.PHN : IMenubarStatus.PCN,
       menuList: [],
       isPhone: document.body.offsetWidth < 768
     },
@@ -72,7 +72,7 @@ export const useLayoutStore = defineStore({
           ? IMenubarStatus.PHE 
           : IMenubarStatus.PHN
         : this.menubar.status === IMenubarStatus.PCN 
-          ? IMenubarStatus.PCE 
+          ? IMenubarStatus.PCE  
           : IMenubarStatus.PCN
     },
     changeDeviceWidth():void {
