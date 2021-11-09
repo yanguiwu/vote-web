@@ -64,17 +64,10 @@ export default defineComponent ({
   setup() {
     const { changeTheme, changeDeviceWidth, changeCollapsed, getMenubar } = useLayoutStore()
     const orderList = ref([])
-    let time:any = null
     changeTheme()
    
     onMounted(async() => {
       initOrderList()
-      if(time) {
-        clearInterval(time)
-      }
-      setInterval(() => {
-        initOrderList()
-      },3000)
       changeDeviceWidth()
       const throttleFn = throttle(300)
       let throttleF = async function() {
@@ -88,6 +81,9 @@ export default defineComponent ({
       let datas = await voteQueryOrderList({})
       let { data } = datas.data.body
       orderList.value = data
+      setTimeout(() => {
+        initOrderList()
+      }, 2000)
     }
     return {
       getMenubar,

@@ -49,11 +49,11 @@
       >
         <template #default='scope'>
           <el-image
-            style='width: 100%; height: auto'
+            style='max-width: 100%; height: 60px'
             :src='scope.row.fileWebPath'
             fit='fill'
           />
-          {{ scope.row.name }}
+          <div>{{ scope.row.name }}</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -103,6 +103,7 @@
       <el-table-column
         prop='invitationName'
         label='链接'
+        width='80px'
       >
         <template #default='scope'>
           <QrcodeVue :value='getUrl(scope.row)' size='60' level='H' />
@@ -111,6 +112,7 @@
       <el-table-column
         prop='remark'
         label='备注'
+        width='80px'
       />
       <el-table-column
         label='状态'
@@ -337,7 +339,7 @@ export default defineComponent({
       listData.value = data.map((item) => {
         return {
           ...item,
-          addInitialTicketNum: ''
+          addInitialTicketNum: item.endUpdateVoteNum || ''
         }
       })
       pageData.value = { ...other }
