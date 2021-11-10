@@ -44,10 +44,15 @@
         prop='infoTitle'
         label='活动名称'
       />
-      <el-table-column
+      <el-table-column label='投票时间' width='140px'> 
+        <template #default='scope'>
+          {{ DateStringConvert(scope.row.createTime) }}
+        </template>
+      </el-table-column>
+      <!-- <el-table-column
         prop='phone'
         label='选手电话号码'
-      />
+      /> -->
       <el-table-column
         prop='voteNum'
         label='票数'
@@ -64,10 +69,6 @@
       <el-table-column
         prop='ipAddr'
         label='IP'
-      />
-      <el-table-column
-        prop='cityName'
-        label='城市'
       />
       <el-table-column
         prop='amount'
@@ -171,7 +172,8 @@ export default defineComponent({
       handleSearch,
       pCurrentChange,
       handleChangeType,
-      infoStatusStr
+      infoStatusStr,
+      DateStringConvert
     }
   }
 })

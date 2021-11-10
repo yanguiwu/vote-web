@@ -17,16 +17,29 @@
         <layout-menubar />
       </div>
       <div class='left-bottom-fixed'>
-        <div v-for='order in orderList' :key='order.id'>
-          {{ order.subName }}充值了
-          <span class='num'>{{ order.payAmount }}</span> 
-          <span v-if='order.payStatus === 1 ' class='color-danger'>
-            未支付
-          </span>
-          <span v-else class='color-success'>
-            已支付
-          </span>
-        </div>
+        <el-collapse v-model='activeName' accordion>
+          <el-collapse-item title='收起' name='1'>
+            <div v-for='order in orderList' :key='order.id'>
+              {{ order.subName }} 
+              <span v-if='order.payStatus === 1 ' class='color-dark'>
+                {{ DateStringConvert(order.createTime) }}
+              </span>
+              <span v-else class='color-dark'>
+                {{ DateStringConvert(order.payTime) }}
+              </span>
+              充值了
+              <span class='num'>{{ order.payAmount }}</span> 
+              <span v-if='order.payStatus === 1 ' class='color-danger'>
+                未支付
+              </span>
+              <span v-else class='color-success'>
+                已支付
+              </span>
+            </div>
+          </el-collapse-item>
+          
+        </el-collapse>
+      
       </div>
     </div>
     <div class='layout-main flex flex-1 flex-col overflow-x-hidden overflow-y-auto'>
@@ -52,6 +65,7 @@ import LayoutSideSetting from '/@/layout/components/sideSetting.vue'
 import { throttle } from '/@/utils/tools'
 import { useLayoutStore } from '/@/store/modules/layout'
 import { voteQueryOrderList } from '/@/api/vote/index'
+import { DateStringConvert } from '/@/utils/tools'
 
 export default defineComponent ({
   name: 'Layout',
@@ -64,7 +78,9 @@ export default defineComponent ({
   setup() {
     const { changeTheme, changeDeviceWidth, changeCollapsed, getMenubar } = useLayoutStore()
     const orderList = ref([])
+    let activeName = ref('1')
     changeTheme()
+
    
     onMounted(async() => {
       initOrderList()
@@ -88,7 +104,9 @@ export default defineComponent ({
     return {
       getMenubar,
       changeCollapsed,
-      orderList
+      orderList,
+      activeName,
+      DateStringConvert
     }
   }
 })
@@ -100,12 +118,13 @@ export default defineComponent ({
   }
   .left-bottom-fixed {
     position: fixed;
-    left: 10px;
-    bottom: 10px;
+    left: 0;
+    bottom: 0;
     line-height: 25px;
     z-index: 1000;
-    background-color: rgba(255,255,255,0.9);
+    background-color: #fff;
     padding: 10px;
+    border: 1px solid #e0e0e0;
     .num {
       min-width: 30px;
       display: inline-block;

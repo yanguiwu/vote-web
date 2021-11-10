@@ -12,19 +12,42 @@
             <div class='help'>当支付与系统使用同一域名时，无需配置支付域名</div>
           </el-form-item>
          
-          <el-divider class='mt-10 mb-5'>微信支付相关配置：谨慎操作，配置错误会导致钻石支付失败！</el-divider>
-          <el-form-item label='公众号-appId'>
+          <el-divider class='mt-10 mb-5'>微信支付相关配置</el-divider>
+          <el-alert
+            title='请谨慎操作，仔细核对以下配置，配置错误会导致钻石支付失败！！！'
+            type='warning'
+            effect='dark'
+            :closable='false'
+            class='mb-5'
+          />
+          <el-alert
+            title='以下配置均为敏感信息，请勿交于他人，以免造成不必要的损失！！！'
+            type='error'
+            effect='dark'
+            :closable='false'
+            class='mb-5'
+          />
+          <el-form-item label='公众号-开发者ID(AppId)'>
             <el-input v-model='formData.appId' size='small' placeholder='公众号appId' style='width: 50%;' />
-            <el-popover placement='top' :width='400' trigger='hover'>
+            <el-popover placement='right' :width='400' trigger='hover'>
               <template #reference>
                 <el-button size='small' class='ml-5'>查看帮助</el-button>
               </template>
               <img src='/@/assets/img/sys-appid.png' style='width: 500px;max-width: 500px;'>
             </el-popover>
           </el-form-item>
+          <el-form-item label='公众号-开发者密码(appSecret)'>
+            <el-input v-model='formData.appSecret' size='small' placeholder='公众号开发者密码(appSecret)' style='width: 50%;' />
+            <el-popover placement='right' :width='400' trigger='hover'>
+              <template #reference>
+                <el-button size='small' class='ml-5'>查看帮助</el-button>
+              </template>
+              <img src='/@/assets/img/sys-appid2.png' style='width: 500px;max-width: 500px;'>
+            </el-popover>
+          </el-form-item>
           <el-form-item label='微信商户平台-微信支付商户号' prop='mchId'>
             <el-input v-model='formData.mchId' type='textarea' placeholder='备注' style='width: 50%;' />
-            <el-popover placement='top' :width='400' trigger='hover'>
+            <el-popover placement='right' :width='400' trigger='hover'>
               <template #reference>
                 <el-button size='small' class='ml-5'>查看帮助</el-button>
               </template>
@@ -33,7 +56,7 @@
           </el-form-item>
           <el-form-item label='微信商户平台-API密钥' prop='wxApiKey'>
             <el-input v-model='formData.wxApiKey' type='textarea' placeholder='备注' style='width: 50%;' /> 
-            <el-popover placement='top' :width='400' trigger='hover'>
+            <el-popover placement='right' :width='400' trigger='hover'>
               <template #reference>
                 <el-button size='small' class='ml-5'>查看帮助</el-button>
               </template>

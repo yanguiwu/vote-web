@@ -31,10 +31,15 @@
         prop='infoTitle'
         label='活动名称'
       />
-      <el-table-column
+      <el-table-column label='投票时间' width='140px'> 
+        <template #default='scope'>
+          {{ DateStringConvert(scope.row.createTime) }}
+        </template>
+      </el-table-column>
+      <!-- <el-table-column
         prop='phone'
         label='选手电话号码'
-      />
+      /> -->
       <el-table-column
         prop='voteNum'
         label='票数'
@@ -52,10 +57,10 @@
         prop='ipAddr'
         label='IP'
       />
-      <el-table-column
+      <!-- <el-table-column
         prop='cityName'
         label='城市'
-      />
+      /> -->
       <el-table-column
         prop='amount'
         label='钻石'
@@ -69,6 +74,7 @@
 import { ref,defineComponent, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { voteLogQueryList } from '/@/api/vote/index'
+import { DateStringConvert } from '/@/utils/tools'
 export default defineComponent({
   emits:['on-search'],
   setup(props:any, context: any) {
@@ -148,7 +154,8 @@ export default defineComponent({
       handleAll,
       handleSearch,
       pCurrentChange,
-      handleChangeType
+      handleChangeType,
+      DateStringConvert
     }
   }
 })

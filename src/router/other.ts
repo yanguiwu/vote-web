@@ -16,12 +16,12 @@ export const otherRouter:Array<IMenubarList> = [
     redirect: '/vote/list',
     meta: { title: '投票活动', icon: 'el-icon-present' },
     children: [
-      {
-        name: 'vote',
-        path: '/vote/data',
-        component: () => import('/@/views/vote/data.vue'),
-        meta: { title: '数据统计', icon: 'el-icon-coin' }
-      },
+      // {
+      //   name: 'vote',
+      //   path: '/vote/data',
+      //   component: () => import('/@/views/vote/data.vue'),
+      //   meta: { title: '数据统计', icon: 'el-icon-coin' }
+      // },
       {
         name: 'voteList',
         path: '/vote/list',
