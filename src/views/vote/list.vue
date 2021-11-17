@@ -332,7 +332,7 @@ export default defineComponent({
       initListData()
     }
     const selectable = (row: any) => {
-      return row.status === 0 || row.status === 3 
+      return row.infoStatus !== 2 
     }
     const handleBetchDelete = () => {
       if(!multipleSelection.value.length) {

@@ -332,6 +332,7 @@ export default defineComponent({
     const initListData = async() => {
       let datas = await queryPlayerList({
         infoId:route.params.voteId,
+        type: 1,
         ...formData.value,
         ...pageData.value
       })

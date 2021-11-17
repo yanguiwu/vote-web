@@ -9,7 +9,7 @@
           </el-form-item>
           <el-form-item label='支付域名' prop='domainName'>
             <el-input v-model='formData.domainName' placeholder='支付域名' style='width: 50%;' />
-            <div class='help'>当支付与系统使用同一域名时，无需配置支付域名</div>
+            <div class='help'>格式：https://xx.xx.xx (支付域名需为https协议的域名)</div>
           </el-form-item>
          
           <el-divider class='mt-10 mb-5'>微信支付相关配置</el-divider>

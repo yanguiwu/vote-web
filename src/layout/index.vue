@@ -16,30 +16,27 @@
       <div class='layout-sidebar-menubar flex flex-1 overflow-hidden'>
         <layout-menubar />
       </div>
-      <div class='left-bottom-fixed'>
-        <el-collapse v-model='activeName' accordion>
-          <el-collapse-item title='收起' name='1'>
-            <div v-for='order in orderList' :key='order.id'>
-              {{ order.subName }} 
-              <span v-if='order.payStatus === 1 ' class='color-dark'>
-                {{ DateStringConvert(order.createTime) }}
-              </span>
-              <span v-else class='color-dark'>
-                {{ DateStringConvert(order.payTime) }}
-              </span>
-              充值了
-              <span class='num'>{{ order.payAmount }}</span> 
-              <span v-if='order.payStatus === 1 ' class='color-danger'>
-                未支付
-              </span>
-              <span v-else class='color-success'>
-                已支付
-              </span>
-            </div>
-          </el-collapse-item>
-          
-        </el-collapse>
-      
+      <div v-if='orderList.length' class='left-bottom-fixed'>
+        <!-- <el-collapse v-model='activeName' accordion>
+          <el-collapse-item title='收起' name='1'> -->
+        <div v-for='order in orderList' :key='order.id' class='order-list'>
+          {{ order.subName }} 
+          <span v-if='order.payStatus === 1 ' class='color-dark time'>
+            {{ DateStringConvert(order.createTime) }}
+          </span>
+          <span v-else class='color-dark time'>
+            {{ DateStringConvert(order.payTime) }}
+          </span>
+          <span class='num'>{{ order.payAmount }}</span> 
+          <span v-if='order.payStatus === 1 ' class='color-danger'>
+            未支付
+          </span>
+          <span v-else class='color-success'>
+            已支付
+          </span>
+        </div>
+        <!-- </el-collapse-item>
+        </el-collapse> -->
       </div>
     </div>
     <div class='layout-main flex flex-1 flex-col overflow-x-hidden overflow-y-auto'>
@@ -120,17 +117,27 @@ export default defineComponent ({
     position: fixed;
     left: 0;
     bottom: 0;
-    line-height: 25px;
     z-index: 1000;
     background-color: #fff;
     padding: 10px;
     border: 1px solid #e0e0e0;
+    font-size: 12px;
+    .order-list {
+      line-height: 1.3;
+      margin-top: 10px;
+    }
+    .time {
+      display: inline-block;
+      vertical-align: top;
+      width: 70px;
+    }
     .num {
       min-width: 30px;
       display: inline-block;
       font-weight: bold;
       color: orange;
-      font-size: 18px;
+      font-size: 16px;
+      margin: 0 3px
     }
   }
 
